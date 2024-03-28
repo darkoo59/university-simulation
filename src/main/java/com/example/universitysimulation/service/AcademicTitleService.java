@@ -2,9 +2,6 @@ package com.example.universitysimulation.service;
 
 import com.example.universitysimulation.dto.AcademicTitleDTO;
 import com.example.universitysimulation.dto.request.AcademicTitleRequest;
-import com.example.universitysimulation.model.AcademicTitle;
-import com.example.universitysimulation.model.AcademicTitleHistory;
-import com.example.universitysimulation.model.Department;
 
 import java.util.List;
 
