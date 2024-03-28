@@ -1,11 +1,15 @@
 package com.example.universitysimulation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -28,6 +32,11 @@ public class Member {
     private String lastname;
 
     @ManyToOne
+    @JoinColumn(name = "department_id")
+    @JsonBackReference
+    private Department department;
+
+    @ManyToOne
     private AcademicTitle academicTitle;
 
     @ManyToOne
@@ -35,5 +44,9 @@ public class Member {
 
     @ManyToOne
     private ScientificField scientificField;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<AcademicTitleHistory> academicTitleHistory;
 
 }
