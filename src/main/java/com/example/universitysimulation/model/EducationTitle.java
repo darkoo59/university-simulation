@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "education-title")
+@Table(name = "education_title")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class EducationTitle {
     private Long id;
 
     @NotEmpty(message = "Title is mandatory field")
-    @Size(min = 2, max = 20, message = "Number of characters in title must be between 2 and 20")
+    @Size(min = 2, max = 30, message = "Number of characters in title must be between 2 and 30")
     @Column(name = "title")
     private String title;
 }

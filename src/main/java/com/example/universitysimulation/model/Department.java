@@ -1,5 +1,7 @@
 package com.example.universitysimulation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -30,9 +32,19 @@ public class Department {
     @Column(name = "short_name")
     private String shortName;
 
+    @ManyToOne
+    private Member headOfDepartment;
+
+    @ManyToOne
+    private Member secretary;
+
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Subject> subjects;
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
+    private List<Member> members;
 
     public Department(Long id, String name, String shortName) {
         this.id = id;
