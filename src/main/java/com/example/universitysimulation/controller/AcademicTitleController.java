@@ -3,12 +3,9 @@ package com.example.universitysimulation.controller;
 import com.example.universitysimulation.dto.AcademicTitleDTO;
 import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.AcademicTitle;
-import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.service.AcademicTitleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/academic-title")
+@RequestMapping("/academicTitles")
 public class AcademicTitleController {
     private final AcademicTitleService academicTitleService;
 
@@ -33,7 +30,7 @@ public class AcademicTitleController {
         return new ResponseEntity<>(title, HttpStatus.OK);
     }
 
-    @PostMapping(path="/create")
+    @PostMapping()
     public ResponseEntity<AcademicTitleDTO> create(@Valid @RequestBody AcademicTitleRequest academicTitleRequest) {
         AcademicTitleDTO title = academicTitleService.create(academicTitleRequest);
         return new ResponseEntity<>(title, HttpStatus.OK);
@@ -45,10 +42,15 @@ public class AcademicTitleController {
         return new ResponseEntity<>("Academic title removed!", HttpStatus.OK);
     }
 
-    @PutMapping(path="/update/{id}")
-    public ResponseEntity<AcademicTitleDTO> update(@Valid @RequestBody AcademicTitleRequest academicTitleRequest,@PathVariable("id") Long id){
+    @PutMapping(path="/{id}")
+    public ResponseEntity<AcademicTitleDTO> updateByPut(@Valid @RequestBody AcademicTitleRequest academicTitleRequest,@PathVariable("id") Long id){
         AcademicTitleDTO title = academicTitleService.update(academicTitleRequest, id);
         return new ResponseEntity<>(title, HttpStatus.OK);
     }
 
+    @PatchMapping(path="/{id}")
+    public ResponseEntity<AcademicTitleDTO> updateByPatch(@Valid @RequestBody AcademicTitleRequest academicTitleRequest,@PathVariable("id") Long id){
+        AcademicTitleDTO title = academicTitleService.update(academicTitleRequest, id);
+        return new ResponseEntity<>(title, HttpStatus.OK);
+    }
 }

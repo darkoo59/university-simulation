@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/subject")
+@RequestMapping("/subjects")
 public class SubjectController {
     private final SubjectService subjectService;
 }
