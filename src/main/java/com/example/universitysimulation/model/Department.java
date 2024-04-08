@@ -39,7 +39,7 @@ public class Department {
     private Member secretary;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
-    @JsonIgnore
+    @JsonBackReference
     private List<Subject> subjects;
 
     @JsonBackReference
