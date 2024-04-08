@@ -1,5 +1,6 @@
 package com.example.universitysimulation.service;
 
+import com.example.universitysimulation.dto.AcademicTitleHistoryDTO;
 import com.example.universitysimulation.dto.DepartmentDTO;
 import com.example.universitysimulation.dto.MemberDTO;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
@@ -14,4 +15,14 @@ public interface MemberService {
     MemberDTO create(MemberRequest memberRequest);
     public void delete(Long id);
     public MemberDTO update(MemberRequest memberRequest, Long id);
+
+    MemberDTO updateEducationTitle(Long memberId, Long educationTitleId);
+
+    MemberDTO updateScientificField(Long memberId, Long scientificFieldId);
+
+    MemberDTO updateAcademicTitle(Long memberId, Long academicTitleId);
+
+    List<AcademicTitleHistoryDTO> getAcademicTitleHistory(Long id);
+
+    MemberDTO updateDepartment(Long memberId, Long departmentId);
 }

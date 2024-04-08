@@ -70,4 +70,32 @@ public class SubjectServiceImpl implements SubjectService {
         Subject savedSubject = subjectRepository.save(subject);
         return ObjectsMapper.convertSubjectToDTO(savedSubject);
     }
+
+    @Override
+    public void deleteDepartment(Long id) {
+        Optional<Subject> optionalSubject = subjectRepository.findById(id);
+        if(optionalSubject.isEmpty()) {
+            throw new NotFoundInDataBaseException("Subject with id "+id+ " not found");
+        }
+        Subject subject = optionalSubject.get();
+        subject.setDepartment(null);
+        subjectRepository.save(subject);
+    }
+
+    @Override
+    public SubjectDTO updateDepartment(Long subjectId, Long departmentId) {
+        Optional<Subject> optionalSubject = subjectRepository.findById(subjectId);
+        if(optionalSubject.isEmpty()) {
+            throw new NotFoundInDataBaseException("Subject with id "+subjectId+ " not found");
+        }
+        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
+        if(optionalDepartment.isEmpty()) {
+            throw new NotFoundInDataBaseException("Department with id "+departmentId+ " not found");
+        }
+
+        Subject subject = optionalSubject.get();
+        subject.setDepartment(optionalDepartment.get());
+        Subject savedSubject = subjectRepository.save(subject);
+        return ObjectsMapper.convertSubjectToDTO(savedSubject);
+    }
 }

@@ -65,4 +65,8 @@ public class ObjectsMapper {
     public static EducationTitle convertEducationTitleDTOToEntity(EducationTitleDTO dto) {
         return modelMapper.map(dto, EducationTitle.class);
     }
+
+    public static AcademicTitleHistoryDTO convertAcademicTitleHistoryToDTO(AcademicTitleHistory ath) {
+        return modelMapper.map(ath, AcademicTitleHistoryDTO.class);
+    }
 }

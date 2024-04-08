@@ -37,15 +37,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> notFoundException(NotFoundInDataBaseException ex) {
         String error = "Entity isn't found in database!";
         CustomError customError =
-                new CustomError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);
+                new CustomError(HttpStatus.NOT_FOUND, ex.getCustomMessage(), error);
         return new ResponseEntity<>(customError,new HttpHeaders(), customError.getStatus());
     }
 
     @ExceptionHandler(value = AlreadyExistInDataBaseException.class)
-    public ResponseEntity<Object> databaseConnectionFailsException(AlreadyExistInDataBaseException ex) {
-        String error = "Database connection fails!";
+    public ResponseEntity<Object> alreadyExistException(AlreadyExistInDataBaseException ex) {
+        String error = "Already exist in database exception!";
         CustomError customError =
-                new CustomError(HttpStatus.CONFLICT, ex.getLocalizedMessage(), error);
+                new CustomError(HttpStatus.CONFLICT, ex.getCustomMessage(), error);
+        return new ResponseEntity<>(customError,new HttpHeaders(), customError.getStatus());
+    }
+
+    @ExceptionHandler(value = IncapableException.class)
+    public ResponseEntity<Object> incapableException(IncapableException ex) {
+        String error = "Object is incapable for this functionality!";
+        CustomError customError =
+                new CustomError(HttpStatus.CONFLICT, ex.getCustomMessage(), error);
         return new ResponseEntity<>(customError,new HttpHeaders(), customError.getStatus());
     }
 
