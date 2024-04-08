@@ -6,6 +6,7 @@ import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.model.ScientificField;
 import com.example.universitysimulation.model.Subject;
+import com.example.universitysimulation.repository.DepartmentRepository;
 import com.example.universitysimulation.repository.SubjectRepository;
 import com.example.universitysimulation.service.DepartmentService;
 import com.example.universitysimulation.service.SubjectService;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
     private final DepartmentService departmentService;
+    private final DepartmentRepository departmentRepository;
     @Override
     public List<SubjectDTO> getAll() {
         return subjectRepository
@@ -44,10 +46,8 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = new Subject();
         subject.setName(subjectRequest.getName());
         subject.setEspb(subjectRequest.getEspb());
-        //TODO Uncomment when implement department logic
-//        Department department = departmentService.getById(subjectRequest.getDepartmentId());
-//        if(department != null)
-//            subjectDTO.setDepartment(department);
+        Optional<Department> department = departmentRepository.findById(subjectRequest.getDepartmentId());
+        department.ifPresent(subject::setDepartment);
         return ObjectsMapper.convertSubjectToDTO(subjectRepository.save(subject));
     }
 

@@ -3,10 +3,8 @@ package com.example.universitysimulation.service.impl;
 import com.example.universitysimulation.dto.MemberDTO;
 import com.example.universitysimulation.dto.request.MemberRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.Department;
-import com.example.universitysimulation.model.Member;
-import com.example.universitysimulation.repository.DepartmentRepository;
-import com.example.universitysimulation.repository.MemberRepository;
+import com.example.universitysimulation.model.*;
+import com.example.universitysimulation.repository.*;
 import com.example.universitysimulation.service.AcademicTitleService;
 import com.example.universitysimulation.service.EducationTitleService;
 import com.example.universitysimulation.service.MemberService;
@@ -23,9 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-    private final AcademicTitleService academicTitleService;
-    private final ScientificFieldService scientificFieldService;
-    private final EducationTitleService educationTitleService;
+    private final AcademicTitleRepository academicTitleRepository;
+    private final ScientificFieldRepository scientificFieldRepository;
+    private final EducationTitleRepository educationTitleRepository;
     @Override
     public List<MemberDTO> getAll() {
         return memberRepository.findAll()
@@ -45,21 +43,40 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO create(MemberRequest memberRequest) {
         Member member = new Member();
+        Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(memberRequest.getAcademicTitleId());
+        Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(memberRequest.getEducationTitleId());
+        Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(memberRequest.getScientificTitleId());
         member.setFirstname(memberRequest.getFirstname());
         member.setLastname(memberRequest.getLastname());
-        member.setAcademicTitle(ObjectsMapper.convertAcademicTitleDTOToEntity(academicTitleService.getById(memberRequest.getAcademicTitleId())));
-        member.setScientificField(ObjectsMapper.convertScientificFieldDTOToEntity(scientificFieldService.getById(memberRequest.getScientificTitleId())));
-        member.setEducationTitle(ObjectsMapper.convertEducationTitleDTOToEntity(educationTitleService.getById(memberRequest.getEducationTitleId())));
+        optionalAcademicTitle.ifPresent(member::setAcademicTitle);
+        optionalEducationTitle.ifPresent(member::setEducationTitle);
+        optionalScientificField.ifPresent(member::setScientificField);
         return ObjectsMapper.convertMemberEntityToDTO(memberRepository.save(member));
     }
 
     @Override
     public void delete(Long id) {
-
+        if(memberRepository.findById(id).isEmpty()) {
+            throw new NotFoundInDataBaseException("Member with id "+id+ " not found");
+        }
+        memberRepository.deleteById(id);
     }
 
     @Override
     public MemberDTO update(MemberRequest memberRequest, Long id) {
-        return null;
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(id);
+        Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(id);
+        Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(id);
+        if(memberRepository.findById(id).isEmpty())
+            throw new NotFoundInDataBaseException("Member with id "+id+ " not found");
+        Member member = memberRepository.findById(id).get();
+        member.setFirstname(memberRequest.getFirstname());
+        member.setLastname(memberRequest.getLastname());
+        optionalAcademicTitle.ifPresent(member::setAcademicTitle);
+        optionalEducationTitle.ifPresent(member::setEducationTitle);
+        optionalScientificField.ifPresent(member::setScientificField);
+        Member savedMember = memberRepository.save(member);
+        return ObjectsMapper.convertMemberEntityToDTO(savedMember);
     }
 }
