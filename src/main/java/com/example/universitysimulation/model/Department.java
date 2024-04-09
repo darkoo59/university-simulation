@@ -1,8 +1,6 @@
 package com.example.universitysimulation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -42,12 +40,12 @@ public class Department {
     @JsonBackReference
     private List<Subject> subjects;
 
-    @JsonBackReference
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
+    @JsonBackReference
     private List<Member> members;
 
-    @JsonBackReference
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
+    @JsonBackReference
     private List<DepartmentManagementHistory> managementHistories;
 
     public Department(Long id, String name, String shortName) {

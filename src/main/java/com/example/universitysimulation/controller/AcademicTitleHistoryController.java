@@ -1,8 +1,6 @@
 package com.example.universitysimulation.controller;
 
-import com.example.universitysimulation.dto.AcademicTitleDTO;
 import com.example.universitysimulation.dto.AcademicTitleHistoryDTO;
-import com.example.universitysimulation.dto.MemberAcademicTitleHistoryDTO;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.service.AcademicTitleHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/academicTitles")
+@RequestMapping("/academicTitlesHistory")
 public class AcademicTitleHistoryController {
     private final AcademicTitleHistoryService academicTitleHistoryService;
 

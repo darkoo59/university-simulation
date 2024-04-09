@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor
-public class AlreadyExistInDataBaseException extends RuntimeException{
+public class AlreadyExistInDataBaseException extends RuntimeException {
     private String customMessage;
 }

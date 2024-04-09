@@ -47,10 +47,4 @@ public class EducationTitleController {
         EducationTitleDTO title = educationTitleService.update(educationTitleRequest, id);
         return new ResponseEntity<>(title, HttpStatus.OK);
     }
-
-    @PatchMapping(path="/{id}")
-    public ResponseEntity<EducationTitleDTO> updateByPatch(@Valid @RequestBody EducationTitleRequest educationTitleRequest,@PathVariable("id") Long id){
-        EducationTitleDTO title = educationTitleService.update(educationTitleRequest, id);
-        return new ResponseEntity<>(title, HttpStatus.OK);
-    }
 }

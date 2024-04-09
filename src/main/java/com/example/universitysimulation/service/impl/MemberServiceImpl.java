@@ -49,8 +49,10 @@ public class MemberServiceImpl implements MemberService {
         Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(memberRequest.getAcademicTitleId());
         Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(memberRequest.getEducationTitleId());
         Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(memberRequest.getScientificTitleId());
+
         member.setFirstname(memberRequest.getFirstname());
         member.setLastname(memberRequest.getLastname());
+
         optionalAcademicTitle.ifPresent(member::setAcademicTitle);
         optionalEducationTitle.ifPresent(member::setEducationTitle);
         optionalScientificField.ifPresent(member::setScientificField);
@@ -67,89 +69,67 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO update(MemberRequest memberRequest, Long id) {
-        Optional<Member> optionalMember = memberRepository.findById(id);
+        Member member = findById(id);
         Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(id);
         Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(id);
         Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(id);
-        if(memberRepository.findById(id).isEmpty())
-            throw new NotFoundInDataBaseException("Member with id " + id + " not found");
-        Member member = memberRepository.findById(id).get();
+
         member.setFirstname(memberRequest.getFirstname());
         member.setLastname(memberRequest.getLastname());
+
         optionalAcademicTitle.ifPresent(member::setAcademicTitle);
         optionalEducationTitle.ifPresent(member::setEducationTitle);
         optionalScientificField.ifPresent(member::setScientificField);
-        Member savedMember = memberRepository.save(member);
-        return ObjectsMapper.convertMemberEntityToDTO(savedMember);
+        return ObjectsMapper.convertMemberEntityToDTO(memberRepository.save(member));
     }
 
     @Override
     public MemberDTO updateEducationTitle(Long memberId, Long educationTitleId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
-        }
-        Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(educationTitleId);
-        if (optionalEducationTitle.isEmpty()) {
-            throw new NotFoundInDataBaseException("Educational title with id " + educationTitleId + " not found");
-        }
-        Member member = optionalMember.get();
-        member.setEducationTitle(optionalEducationTitle.get());
+        Member member = findById(memberId);
+        EducationTitle educationTitle = educationTitleRepository.findById(educationTitleId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Education title with id " + educationTitleId + " not found"));
+        member.setEducationTitle(educationTitle);
         Member savedMember = memberRepository.save(member);
         return ObjectsMapper.convertMemberEntityToDTO(savedMember);
     }
 
     @Override
     public MemberDTO updateScientificField(Long memberId, Long scientificFieldId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
-        }
-        Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(scientificFieldId);
-        if (optionalScientificField.isEmpty()) {
-            throw new NotFoundInDataBaseException("Scientific field with id " + scientificFieldId + " not found");
-        }
-        Member member = optionalMember.get();
-        member.setScientificField(optionalScientificField.get());
-        Member savedMember = memberRepository.save(member);
-        return ObjectsMapper.convertMemberEntityToDTO(savedMember);
+        Member member = findById(memberId);
+        ScientificField scientificField = scientificFieldRepository.findById(scientificFieldId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Scientific field with id " + scientificFieldId + " not found"));
+        member.setScientificField(scientificField);
+        return ObjectsMapper.convertMemberEntityToDTO(memberRepository.save(member));
     }
 
     @Override
     public MemberDTO updateAcademicTitle(Long memberId, Long academicTitleId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
-        }
-        Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(academicTitleId);
-        if (optionalAcademicTitle.isEmpty()) {
-            throw new NotFoundInDataBaseException("Academic title with id " + academicTitleId + " not found");
-        }
-        Member member = optionalMember.get();
-        Optional<AcademicTitleHistory> optionalAcademicTitleHistory = academicTitleHistoryRepository.findByCurrentAcademicTitle(memberId, member.getAcademicTitle().getId());
-        if (optionalAcademicTitleHistory.isPresent()) {
-            AcademicTitleHistory currentAcademicTitle = optionalAcademicTitleHistory.get();
-            currentAcademicTitle.setEndDate(LocalDate.now());
-            academicTitleHistoryRepository.save(currentAcademicTitle);
-        }
-        member.setAcademicTitle(optionalAcademicTitle.get());
+        Member member = findById(memberId);
+        AcademicTitle academicTitle = academicTitleRepository.findById(academicTitleId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Academic title with id " + academicTitleId + " not found"));
+
+        academicTitleHistoryRepository.findByCurrentAcademicTitle(memberId, member.getAcademicTitle().getId())
+                .ifPresent(currentAcademicTitle -> {
+                    currentAcademicTitle.setEndDate(LocalDate.now());
+                    academicTitleHistoryRepository.save(currentAcademicTitle);
+                });
+        member.setAcademicTitle(academicTitle);
+
         AcademicTitleHistory newAcademicTitle = new AcademicTitleHistory();
         newAcademicTitle.setMember(member);
-        newAcademicTitle.setAcademicTitle(optionalAcademicTitle.get());
+        newAcademicTitle.setAcademicTitle(academicTitle);
         newAcademicTitle.setStartDate(LocalDate.now());
         newAcademicTitle.setScientificField(member.getScientificField());
         academicTitleHistoryRepository.save(newAcademicTitle);
+
         Member savedMember = memberRepository.save(member);
+
         return ObjectsMapper.convertMemberEntityToDTO(savedMember);
     }
 
     @Override
     public List<MemberAcademicTitleHistoryDTO> getAcademicTitleHistory(Long id) {
-        Optional<Member> optionalMember = memberRepository.findById(id);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + id + " not found");
-        }
-        return optionalMember.get().getAcademicTitleHistory()
+        return findById(id).getAcademicTitleHistory()
                 .stream()
                 .map(ObjectsMapper::convertMemberAcademicTitleHistoryToDTO)
                 .collect(Collectors.toList());
@@ -157,19 +137,23 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO updateDepartment(Long memberId, Long departmentId) throws NotFoundInDataBaseException, AlreadyExistInDataBaseException {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
+        Member memberToUpdate = findById(memberId);
+        Department newDepartment = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Department with id " + departmentId + " not found"));
+        if (departmentRepository.isDepartmentWithMemberApartFromDepartment(memberId, departmentId)) {
+            throw new AlreadyExistInDataBaseException("Member department can't be updated because member is "
+                    + "head of department or secretary in another department");
         }
-        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-        if (optionalDepartment.isEmpty())
-            throw new NotFoundInDataBaseException("Department with id " + departmentId + " not found");
-        if (departmentRepository.isDepartmentWithMemberApartFromDepartment(memberId, departmentId))
-            throw new AlreadyExistInDataBaseException("Member department can't be updated because member is " +
-                "head of department or secretary on other department!");
-        Member memberToUpdate = optionalMember.get();
-        memberToUpdate.setDepartment(optionalDepartment.get());
+        memberToUpdate.setDepartment(newDepartment);
         Member updatedMember = memberRepository.save(memberToUpdate);
         return ObjectsMapper.convertMemberEntityToDTO(updatedMember);
+    }
+
+    @Override
+    public Member findById(Long id) {
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        if (optionalMember.isEmpty())
+            throw new NotFoundInDataBaseException("Member with id " + id + " not found");
+        return optionalMember.get();
     }
 }

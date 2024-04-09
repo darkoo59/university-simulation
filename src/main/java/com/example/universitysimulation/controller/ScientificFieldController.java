@@ -1,8 +1,6 @@
 package com.example.universitysimulation.controller;
 
-import com.example.universitysimulation.dto.EducationTitleDTO;
 import com.example.universitysimulation.dto.ScientificFieldDTO;
-import com.example.universitysimulation.dto.request.EducationTitleRequest;
 import com.example.universitysimulation.dto.request.ScientificFieldRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.service.ScientificFieldService;
@@ -39,19 +37,13 @@ public class ScientificFieldController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         scientificFieldService.delete(id);
         return new ResponseEntity<>("Scientific field removed!", HttpStatus.OK);
     }
 
-    @PutMapping(path="/{id}")
-    public ResponseEntity<ScientificFieldDTO> updateByPut(@Valid @RequestBody ScientificFieldRequest scientificFieldRequest,@PathVariable("id") Long id){
-        ScientificFieldDTO field = scientificFieldService.update(scientificFieldRequest, id);
-        return new ResponseEntity<>(field, HttpStatus.OK);
-    }
-
-    @PatchMapping(path="/{id}")
-    public ResponseEntity<ScientificFieldDTO> updateByPatch(@Valid @RequestBody ScientificFieldRequest scientificFieldRequest,@PathVariable("id") Long id){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ScientificFieldDTO> updateByPut(@Valid @RequestBody ScientificFieldRequest scientificFieldRequest, @PathVariable("id") Long id) {
         ScientificFieldDTO field = scientificFieldService.update(scientificFieldRequest, id);
         return new ResponseEntity<>(field, HttpStatus.OK);
     }

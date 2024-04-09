@@ -1,11 +1,8 @@
 package com.example.universitysimulation.controller;
 
-import com.example.universitysimulation.dto.ScientificFieldDTO;
 import com.example.universitysimulation.dto.SubjectDTO;
-import com.example.universitysimulation.dto.request.ScientificFieldRequest;
 import com.example.universitysimulation.dto.request.SubjectRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.Subject;
 import com.example.universitysimulation.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,25 +37,25 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         subjectService.delete(id);
         return new ResponseEntity<>("Subject removed!", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/department")
-    public ResponseEntity<String> deleteDepartment(@PathVariable("id") Long id){
+    public ResponseEntity<String> deleteDepartment(@PathVariable("id") Long id) {
         subjectService.deleteDepartment(id);
         return new ResponseEntity<>("Subject department removed!", HttpStatus.OK);
     }
 
-    @PutMapping(path="/{id}")
-    public ResponseEntity<SubjectDTO> updateByPut(@Valid @RequestBody SubjectRequest subjectRequest, @PathVariable("id") Long id){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<SubjectDTO> updateByPut(@Valid @RequestBody SubjectRequest subjectRequest, @PathVariable("id") Long id) {
         SubjectDTO subject = subjectService.update(subjectRequest, id);
         return new ResponseEntity<>(subject, HttpStatus.OK);
     }
 
-    @PatchMapping(path="/{subjectId}/department/{departmentId}")
-    public ResponseEntity<SubjectDTO> updateDepartment(@PathVariable("subjectId") Long subjectId, @PathVariable("departmentId") Long departmentId){
+    @PatchMapping(path = "/{subjectId}/department/{departmentId}")
+    public ResponseEntity<SubjectDTO> updateDepartment(@PathVariable("subjectId") Long subjectId, @PathVariable("departmentId") Long departmentId) {
         SubjectDTO subject = subjectService.updateDepartment(subjectId, departmentId);
         return new ResponseEntity<>(subject, HttpStatus.OK);
     }

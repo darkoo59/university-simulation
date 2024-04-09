@@ -29,10 +29,8 @@ public class EducationTitleServiceImpl implements EducationTitleService {
 
     @Override
     public EducationTitleDTO getById(Long id) throws NotFoundInDataBaseException{
-        Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(id);
-        if(optionalEducationTitle.isEmpty())
-            throw new NotFoundInDataBaseException("Education title with id " + id + " not found");
-        return ObjectsMapper.convertEducationTitleToDTO(optionalEducationTitle.get());
+        EducationTitle educationTitle = findById(id);
+        return ObjectsMapper.convertEducationTitleToDTO(educationTitle);
     }
 
     @Override
@@ -58,5 +56,12 @@ public class EducationTitleServiceImpl implements EducationTitleService {
         educationTitle.setId(id);
         EducationTitle savedEducationTitle = educationTitleRepository.save(educationTitle);
         return ObjectsMapper.convertEducationTitleToDTO(savedEducationTitle);
+    }
+
+    private EducationTitle findById(Long id) {
+        Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(id);
+        if(optionalEducationTitle.isEmpty())
+            throw new NotFoundInDataBaseException("Education title with id " + id + " not found");
+        return optionalEducationTitle.get();
     }
 }
