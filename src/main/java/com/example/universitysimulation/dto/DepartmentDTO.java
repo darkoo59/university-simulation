@@ -9,10 +9,8 @@ import java.io.Serializable;
 @Data
 public class DepartmentDTO implements Serializable {
     private Long id;
-
-    @NotNull
-    @Size(min = 2,max = 10, message = "Number of characters [2-10]")
     private String name;
-
-
+    private String shortName;
+    private MemberDTO headOfDepartment;
+    private MemberDTO secretary;
 }

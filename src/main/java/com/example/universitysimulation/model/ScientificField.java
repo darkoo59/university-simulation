@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "scientific_field")
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "scientific_field")
 public class ScientificField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotEmpty(message = "Field is mandatory field")
-    @Size(min = 2, max = 30, message = "Number of characters in field must be between 2 and 20")
+    @Size(min = 2, max = 30, message = "Number of characters in field must be between 2 and 30")
     @Column(name = "field")
     private String field;
 }

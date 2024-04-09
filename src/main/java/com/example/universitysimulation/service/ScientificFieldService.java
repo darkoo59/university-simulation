@@ -1,8 +1,6 @@
 package com.example.universitysimulation.service;
 
-import com.example.universitysimulation.dto.EducationTitleDTO;
 import com.example.universitysimulation.dto.ScientificFieldDTO;
-import com.example.universitysimulation.dto.request.EducationTitleRequest;
 import com.example.universitysimulation.dto.request.ScientificFieldRequest;
 
 import java.util.List;

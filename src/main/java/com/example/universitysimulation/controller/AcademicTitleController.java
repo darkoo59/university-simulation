@@ -37,19 +37,13 @@ public class AcademicTitleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         academicTitleService.delete(id);
         return new ResponseEntity<>("Academic title removed!", HttpStatus.OK);
     }
 
-    @PutMapping(path="/{id}")
-    public ResponseEntity<AcademicTitleDTO> updateByPut(@Valid @RequestBody AcademicTitleRequest academicTitleRequest,@PathVariable("id") Long id){
-        AcademicTitleDTO title = academicTitleService.update(academicTitleRequest, id);
-        return new ResponseEntity<>(title, HttpStatus.OK);
-    }
-
-    @PatchMapping(path="/{id}")
-    public ResponseEntity<AcademicTitleDTO> updateByPatch(@Valid @RequestBody AcademicTitleRequest academicTitleRequest,@PathVariable("id") Long id){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<AcademicTitleDTO> update(@Valid @RequestBody AcademicTitleRequest academicTitleRequest, @PathVariable("id") Long id) {
         AcademicTitleDTO title = academicTitleService.update(academicTitleRequest, id);
         return new ResponseEntity<>(title, HttpStatus.OK);
     }
