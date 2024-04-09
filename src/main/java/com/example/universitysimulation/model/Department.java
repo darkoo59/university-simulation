@@ -46,6 +46,10 @@ public class Department {
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
     private List<Member> members;
 
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
+    private List<DepartmentManagementHistory> managementHistories;
+
     public Department(Long id, String name, String shortName) {
         this.id = id;
         this.name = name;

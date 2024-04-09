@@ -45,15 +45,21 @@ public class SubjectController {
         return new ResponseEntity<>("Subject removed!", HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}/department")
+    public ResponseEntity<String> deleteDepartment(@PathVariable("id") Long id){
+        subjectService.deleteDepartment(id);
+        return new ResponseEntity<>("Subject department removed!", HttpStatus.OK);
+    }
+
     @PutMapping(path="/{id}")
     public ResponseEntity<SubjectDTO> updateByPut(@Valid @RequestBody SubjectRequest subjectRequest, @PathVariable("id") Long id){
         SubjectDTO subject = subjectService.update(subjectRequest, id);
         return new ResponseEntity<>(subject, HttpStatus.OK);
     }
 
-    @PatchMapping(path="/{id}")
-    public ResponseEntity<SubjectDTO> updateByPatch(@Valid @RequestBody SubjectRequest subjectRequest,@PathVariable("id") Long id){
-        SubjectDTO subject = subjectService.update(subjectRequest, id);
+    @PatchMapping(path="/{subjectId}/department/{departmentId}")
+    public ResponseEntity<SubjectDTO> updateDepartment(@PathVariable("subjectId") Long subjectId, @PathVariable("departmentId") Long departmentId){
+        SubjectDTO subject = subjectService.updateDepartment(subjectId, departmentId);
         return new ResponseEntity<>(subject, HttpStatus.OK);
     }
 }
