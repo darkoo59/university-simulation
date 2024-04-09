@@ -1,11 +1,8 @@
 package com.example.universitysimulation.controller;
 
-import com.example.universitysimulation.dto.AcademicTitleDTO;
-import com.example.universitysimulation.dto.AcademicTitleHistoryDTO;
+import com.example.universitysimulation.dto.MemberAcademicTitleHistoryDTO;
 import com.example.universitysimulation.dto.MemberDTO;
-import com.example.universitysimulation.dto.SubjectDTO;
 import com.example.universitysimulation.dto.request.MemberRequest;
-import com.example.universitysimulation.dto.request.SubjectRequest;
 import com.example.universitysimulation.exception.AlreadyExistInDataBaseException;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.service.MemberService;
@@ -36,8 +33,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/academic-title-history")
-    public ResponseEntity<List<AcademicTitleHistoryDTO>> getAcademicTitlesHistory(@PathVariable("id") Long id) throws NotFoundInDataBaseException {
-        List<AcademicTitleHistoryDTO> academicTitleHistory = memberService.getAcademicTitleHistory(id);
+    public ResponseEntity<List<MemberAcademicTitleHistoryDTO>> getAcademicTitlesHistory(@PathVariable("id") Long id) throws NotFoundInDataBaseException {
+        List<MemberAcademicTitleHistoryDTO> academicTitleHistory = memberService.getAcademicTitleHistory(id);
         return new ResponseEntity<>(academicTitleHistory, HttpStatus.OK);
     }
 

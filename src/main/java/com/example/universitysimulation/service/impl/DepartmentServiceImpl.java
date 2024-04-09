@@ -1,9 +1,6 @@
 package com.example.universitysimulation.service.impl;
 
-import com.example.universitysimulation.dto.AcademicTitleDTO;
-import com.example.universitysimulation.dto.DepartmentDTO;
-import com.example.universitysimulation.dto.MemberDTO;
-import com.example.universitysimulation.dto.SubjectDTO;
+import com.example.universitysimulation.dto.*;
 import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.exception.IncapableException;
@@ -172,5 +169,17 @@ public class DepartmentServiceImpl implements DepartmentService {
         newDmh.setHeadOfDepartment(department.getHeadOfDepartment());
         departmentManagementHistoryRepository.save(newDmh);
         return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(departmentId).get());
+    }
+
+    @Override
+    public List<DepartmentManagementHistoryDTO> getDepartmentManagementHistory(Long id) {
+        Optional<Department> optionalDepartment = departmentRepository.findById(id);
+        if (optionalDepartment.isEmpty()) {
+            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
+        }
+        return optionalDepartment.get().getManagementHistories()
+                .stream()
+                .map(ObjectsMapper::convertDepartmentManagementHistoryToDTO)
+                .collect(Collectors.toList());
     }
 }

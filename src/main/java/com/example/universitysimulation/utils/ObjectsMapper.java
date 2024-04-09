@@ -66,7 +66,15 @@ public class ObjectsMapper {
         return modelMapper.map(dto, EducationTitle.class);
     }
 
+    public static MemberAcademicTitleHistoryDTO convertMemberAcademicTitleHistoryToDTO(AcademicTitleHistory ath) {
+        return modelMapper.map(ath, MemberAcademicTitleHistoryDTO.class);
+    }
+
     public static AcademicTitleHistoryDTO convertAcademicTitleHistoryToDTO(AcademicTitleHistory ath) {
         return modelMapper.map(ath, AcademicTitleHistoryDTO.class);
+    }
+
+    public static DepartmentManagementHistoryDTO convertDepartmentManagementHistoryToDTO(DepartmentManagementHistory departmentManagementHistory) {
+        return modelMapper.map(departmentManagementHistory, DepartmentManagementHistoryDTO.class);
     }
 }

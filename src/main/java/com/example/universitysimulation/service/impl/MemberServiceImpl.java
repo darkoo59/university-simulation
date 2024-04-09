@@ -1,19 +1,15 @@
 package com.example.universitysimulation.service.impl;
 
-import com.example.universitysimulation.dto.AcademicTitleHistoryDTO;
+import com.example.universitysimulation.dto.MemberAcademicTitleHistoryDTO;
 import com.example.universitysimulation.dto.MemberDTO;
 import com.example.universitysimulation.dto.request.MemberRequest;
 import com.example.universitysimulation.exception.AlreadyExistInDataBaseException;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.*;
 import com.example.universitysimulation.repository.*;
-import com.example.universitysimulation.service.AcademicTitleService;
-import com.example.universitysimulation.service.EducationTitleService;
 import com.example.universitysimulation.service.MemberService;
-import com.example.universitysimulation.service.ScientificFieldService;
 import com.example.universitysimulation.utils.ObjectsMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -148,14 +144,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<AcademicTitleHistoryDTO> getAcademicTitleHistory(Long id) {
+    public List<MemberAcademicTitleHistoryDTO> getAcademicTitleHistory(Long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         if (optionalMember.isEmpty()) {
             throw new NotFoundInDataBaseException("Member with id " + id + " not found");
         }
         return optionalMember.get().getAcademicTitleHistory()
                 .stream()
-                .map(ObjectsMapper::convertAcademicTitleHistoryToDTO)
+                .map(ObjectsMapper::convertMemberAcademicTitleHistoryToDTO)
                 .collect(Collectors.toList());
     }
 

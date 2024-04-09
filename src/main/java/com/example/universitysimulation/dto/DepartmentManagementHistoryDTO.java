@@ -9,11 +9,11 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AcademicTitleHistoryDTO {
+public class DepartmentManagementHistoryDTO {
     private Long id;
+    private DepartmentDTO department;
+    private MemberDTO headOfDepartment;
+    private MemberDTO secretary;
     private LocalDate startDate;
     private LocalDate endDate;
-    private MemberDTO memberDTO;
-    private AcademicTitleDTO academicTitleDTO;
-    private ScientificFieldDTO scientificFieldDTO;
 }

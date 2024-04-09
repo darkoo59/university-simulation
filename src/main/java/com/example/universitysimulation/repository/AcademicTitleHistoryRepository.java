@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.List;
 
 public interface AcademicTitleHistoryRepository extends JpaRepository<AcademicTitleHistory, Long> {
     @Query("SELECT ath FROM AcademicTitleHistory ath " +
@@ -18,4 +19,7 @@ public interface AcademicTitleHistoryRepository extends JpaRepository<AcademicTi
             "  AND ath.endDate IS NULL")
     Optional<AcademicTitleHistory> findByCurrentAcademicTitle(@Param("memberId") Long memberId,
                                                               @Param("academicTitleId") Long academicTitleId);
+
+@Query("SELECT ath FROM AcademicTitleHistory ath WHERE ath.member.id=:id")
+    List<AcademicTitleHistory> findAllByMemberId(@Param("id") Long id);
 }

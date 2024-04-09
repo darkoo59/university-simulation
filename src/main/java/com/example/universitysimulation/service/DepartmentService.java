@@ -1,9 +1,6 @@
 package com.example.universitysimulation.service;
 
-import com.example.universitysimulation.dto.AcademicTitleDTO;
-import com.example.universitysimulation.dto.DepartmentDTO;
-import com.example.universitysimulation.dto.MemberDTO;
-import com.example.universitysimulation.dto.SubjectDTO;
+import com.example.universitysimulation.dto.*;
 import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.model.Department;
@@ -24,4 +21,6 @@ public interface DepartmentService {
     DepartmentDTO updateHeadOfDepartment(Long departmentId, Long memberId);
 
     DepartmentDTO updateSecretary(Long departmentId, Long memberId);
+
+    List<DepartmentManagementHistoryDTO> getDepartmentManagementHistory(Long id);
 }

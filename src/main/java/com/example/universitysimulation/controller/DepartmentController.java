@@ -1,9 +1,6 @@
 package com.example.universitysimulation.controller;
 
-import com.example.universitysimulation.dto.AcademicTitleDTO;
-import com.example.universitysimulation.dto.DepartmentDTO;
-import com.example.universitysimulation.dto.MemberDTO;
-import com.example.universitysimulation.dto.SubjectDTO;
+import com.example.universitysimulation.dto.*;
 import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
@@ -27,6 +24,12 @@ public class DepartmentController {
     public ResponseEntity<List<DepartmentDTO>> getAll() {
         List<DepartmentDTO> departments = departmentService.getAll();
         return new ResponseEntity<>(departments, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/managementHistory")
+    public ResponseEntity<List<DepartmentManagementHistoryDTO>> getDepartmentManagementHistory(@PathVariable("id") Long id) {
+        List<DepartmentManagementHistoryDTO> history = departmentService.getDepartmentManagementHistory(id);
+        return new ResponseEntity<>(history, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/members")
