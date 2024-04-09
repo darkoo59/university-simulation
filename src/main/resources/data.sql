@@ -44,13 +44,27 @@ VALUES ('Department of Computer Science', 'CS', 2, 1),
        ('Department of Mathematics', 'Math', 5, 3),
        ('Department of Science', 'Science', 7, 4);
 
-UPDATE member SET department_id = 1 WHERE id = 1;
-UPDATE member SET department_id = 1 WHERE id = 2;
-UPDATE member SET department_id = 1 WHERE id = 3;
-UPDATE member SET department_id = 2 WHERE id = 4;
-UPDATE member SET department_id = 2 WHERE id = 5;
-UPDATE member SET department_id = 3 WHERE id = 6;
-UPDATE member SET department_id = 3 WHERE id = 7;
+UPDATE member
+SET department_id = 1
+WHERE id = 1;
+UPDATE member
+SET department_id = 1
+WHERE id = 2;
+UPDATE member
+SET department_id = 1
+WHERE id = 3;
+UPDATE member
+SET department_id = 2
+WHERE id = 4;
+UPDATE member
+SET department_id = 2
+WHERE id = 5;
+UPDATE member
+SET department_id = 3
+WHERE id = 6;
+UPDATE member
+SET department_id = 3
+WHERE id = 7;
 
 INSERT INTO subject (name, espb, department_id)
 VALUES ('Introduction to Computer Science', 6, 1),
@@ -62,7 +76,7 @@ VALUES ('Introduction to Computer Science', 6, 1),
        ('Developmental Psychology', 6, 3);
 
 INSERT into academic_title_history (start_date, end_date, member_id, academic_title_id, scientific_field_id)
-VALUES ('2020-01-01', '2020-12-31', 1,  2, 1),
+VALUES ('2020-01-01', '2020-12-31', 1, 2, 1),
        ('2021-01-01', null, 1, 1, 1),
        ('2020-01-01', null, 2, 6, 1),
        ('2019-01-01', '2019-12-31', 3, 2, 2),

@@ -4,14 +4,10 @@ import com.example.universitysimulation.dto.request.*;
 import com.example.universitysimulation.model.*;
 import org.modelmapper.ModelMapper;
 public class ObjectsMapper {
-    private static ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper modelMapper = new ModelMapper();
 
     public static AcademicTitleDTO convertAcademicTitleToDTO(AcademicTitle academicTitle){
         return modelMapper.map(academicTitle, AcademicTitleDTO.class);
-    }
-
-    public static AcademicTitle convertAcademicTitleRequestToEntity(AcademicTitleRequest academicTitleRequest) {
-        return modelMapper.map(academicTitleRequest, AcademicTitle.class);
     }
 
     public static EducationTitleDTO convertEducationTitleToDTO(EducationTitle educationTitle){
@@ -24,10 +20,6 @@ public class ObjectsMapper {
 
     public static ScientificFieldDTO convertScientificFieldToDTO(ScientificField scientificField) {
         return modelMapper.map(scientificField, ScientificFieldDTO.class);
-    }
-
-    public static ScientificField convertScientificFieldRequestToEntity(ScientificFieldRequest scientificFieldRequest) {
-        return modelMapper.map(scientificFieldRequest, ScientificField.class);
     }
 
     public static SubjectDTO convertSubjectToDTO(Subject subject) {
@@ -44,26 +36,10 @@ public class ObjectsMapper {
         return modelMapper.map(department, DepartmentDTO.class);
     }
 
-    public static Department convertDepartmentRequestToEntity(DepartmentRequest departmentRequest) {
-        return modelMapper.map(departmentRequest, Department.class);
-    }
-
     public static MemberDTO convertMemberEntityToDTO(Member member) {
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
         memberDTO.setDepartmentName(member.getDepartment().getName());
         return memberDTO;
-    }
-
-    public static AcademicTitle convertAcademicTitleDTOToEntity(AcademicTitleDTO dto) {
-        return modelMapper.map(dto, AcademicTitle.class);
-    }
-
-    public static ScientificField convertScientificFieldDTOToEntity(ScientificFieldDTO dto) {
-        return modelMapper.map(dto, ScientificField.class);
-    }
-
-    public static EducationTitle convertEducationTitleDTOToEntity(EducationTitleDTO dto) {
-        return modelMapper.map(dto, EducationTitle.class);
     }
 
     public static MemberAcademicTitleHistoryDTO convertMemberAcademicTitleHistoryToDTO(AcademicTitleHistory ath) {

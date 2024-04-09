@@ -1,18 +1,15 @@
 package com.example.universitysimulation.service.impl;
 
 import com.example.universitysimulation.dto.*;
-import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
-import com.example.universitysimulation.exception.IncapableException;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.AcademicTitle;
 import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.model.DepartmentManagementHistory;
 import com.example.universitysimulation.model.Member;
-import com.example.universitysimulation.repository.DepartmentManagementHistoryRepository;
 import com.example.universitysimulation.repository.DepartmentRepository;
-import com.example.universitysimulation.repository.MemberRepository;
+import com.example.universitysimulation.service.DepartmentManagementHistoryService;
 import com.example.universitysimulation.service.DepartmentService;
+import com.example.universitysimulation.service.MemberService;
 import com.example.universitysimulation.utils.ObjectsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,22 +23,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
-    private final MemberRepository memberRepository;
-    private final DepartmentManagementHistoryRepository departmentManagementHistoryRepository;
+    private final MemberService memberService;
+    private final DepartmentManagementHistoryService departmentManagementHistoryService;
+
     @Override
     public List<DepartmentDTO> getAll() {
-        return departmentRepository.findAll()
-                .stream()
-                .map(ObjectsMapper::convertDepartmentEntityToDTO)
-                .collect(Collectors.toList());
+        return departmentRepository.findAll().stream().map(ObjectsMapper::convertDepartmentEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
     public DepartmentDTO getById(Long id) {
-        Optional<Department> optionalDepartment = departmentRepository.findById(id);
-        if(optionalDepartment.isEmpty())
-            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
-        return ObjectsMapper.convertDepartmentEntityToDTO(optionalDepartment.get());
+        Department department = findById(id);
+        return ObjectsMapper.convertDepartmentEntityToDTO(department);
     }
 
     @Override
@@ -53,18 +46,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void delete(Long id) throws NotFoundInDataBaseException{
-        if(departmentRepository.findById(id).isEmpty()) {
-            throw new NotFoundInDataBaseException("Department with id "+id+ " not found");
+    public void delete(Long id) throws NotFoundInDataBaseException {
+        if (departmentRepository.findById(id).isEmpty()) {
+            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
         }
         departmentRepository.deleteById(id);
     }
 
     @Override
     public DepartmentDTO update(DepartmentRequest departmentRequest, Long id) {
-        if(departmentRepository.findById(id).isEmpty())
-            throw new NotFoundInDataBaseException("Department with id "+id+ " not found");
-        Department department = departmentRepository.findById(id).get();
+        Department department = findById(id);
         department.setName(departmentRequest.getName());
         department.setShortName(departmentRequest.getShortName());
         Department savedDepartment = departmentRepository.save(department);
@@ -73,113 +64,78 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<MemberDTO> getAllMembers(Long id) {
-        Optional<Department> optionalDepartment = departmentRepository.findById(id);
-        if (optionalDepartment.isEmpty()) {
-            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
-        }
-        return optionalDepartment.get().getMembers()
-                .stream()
-                .map(ObjectsMapper::convertMemberEntityToDTO)
-                .collect(Collectors.toList());
+        Department department = findById(id);
+        return department.getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<SubjectDTO> getAllSubjects(Long id) {
-        Optional<Department> optionalDepartment = departmentRepository.findById(id);
-        if (optionalDepartment.isEmpty()) {
-            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
-        }
-        return optionalDepartment.get().getSubjects()
-                .stream()
-                .map(ObjectsMapper::convertSubjectToDTO)
-                .collect(Collectors.toList());
+        Department department = findById(id);
+        return department.getSubjects().stream().map(ObjectsMapper::convertSubjectToDTO).collect(Collectors.toList());
     }
 
     @Override
     public DepartmentDTO updateHeadOfDepartment(Long departmentId, Long memberId) {
-        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-        if (optionalDepartment.isEmpty()) {
-            throw new NotFoundInDataBaseException("Department with id " + departmentId + " not found");
-        }
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
-        }
-        Member member = optionalMember.get();
-        Department department = optionalDepartment.get();
-        if(!member.getDepartment().getId().equals(departmentId)){
-            throw new IncapableException("Provided member can't be head of the department because it is in different department!");
-        }
-        for (DepartmentManagementHistory dmh : department.getManagementHistories()){
-            if(dmh.getEndDate() == null && !dmh.getHeadOfDepartment().getId().equals(memberId)) {
-                DepartmentManagementHistory newDmh = new DepartmentManagementHistory();
-                newDmh.setDepartment(department);
-                newDmh.setSecretary(department.getSecretary());
-                newDmh.setStartDate(LocalDate.now());
-                newDmh.setHeadOfDepartment(member);
-                departmentManagementHistoryRepository.save(newDmh);
-                dmh.setEndDate(LocalDate.now());
-                departmentManagementHistoryRepository.save(dmh);
-                return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(departmentId).get());
-            }
-        }
-
-        DepartmentManagementHistory newDmh = new DepartmentManagementHistory();
-        newDmh.setDepartment(department);
-        newDmh.setSecretary(department.getSecretary());
-        newDmh.setStartDate(LocalDate.now());
-        newDmh.setHeadOfDepartment(member);
-        departmentManagementHistoryRepository.save(newDmh);
-        return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(departmentId).get());
+        Department department = findById(departmentId);
+        Member member = memberService.findById(memberId);
+        return setHeadOfDepartment(department, member);
     }
 
     @Override
     public DepartmentDTO updateSecretary(Long departmentId, Long memberId) {
-        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-        if (optionalDepartment.isEmpty()) {
-            throw new NotFoundInDataBaseException("Department with id " + departmentId + " not found");
-        }
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isEmpty()) {
-            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
-        }
-        Member member = optionalMember.get();
-        Department department = optionalDepartment.get();
-        if(!member.getDepartment().getId().equals(departmentId)){
-            throw new IncapableException("Provided member can't be secretary because it is in different department!");
-        }
-        for (DepartmentManagementHistory dmh : department.getManagementHistories()){
-            if(dmh.getEndDate() == null && !dmh.getHeadOfDepartment().getId().equals(memberId)) {
-                DepartmentManagementHistory newDmh = new DepartmentManagementHistory();
-                newDmh.setDepartment(department);
-                newDmh.setSecretary(member);
-                newDmh.setStartDate(LocalDate.now());
-                newDmh.setHeadOfDepartment(department.getHeadOfDepartment());
-                departmentManagementHistoryRepository.save(newDmh);
-                dmh.setEndDate(LocalDate.now());
-                departmentManagementHistoryRepository.save(dmh);
-                return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(departmentId).get());
-            }
-        }
-
-        DepartmentManagementHistory newDmh = new DepartmentManagementHistory();
-        newDmh.setDepartment(department);
-        newDmh.setSecretary(member);
-        newDmh.setStartDate(LocalDate.now());
-        newDmh.setHeadOfDepartment(department.getHeadOfDepartment());
-        departmentManagementHistoryRepository.save(newDmh);
-        return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(departmentId).get());
+        Department department = findById(departmentId);
+        Member member = memberService.findById(memberId);
+        return setSecretary(department, member);
     }
 
     @Override
     public List<DepartmentManagementHistoryDTO> getDepartmentManagementHistory(Long id) {
+        Department department = findById(id);
+        return department.getManagementHistories().stream().map(ObjectsMapper::convertDepartmentManagementHistoryToDTO).collect(Collectors.toList());
+    }
+
+    private Department findById(Long id) {
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
-        if (optionalDepartment.isEmpty()) {
+        if (optionalDepartment.isEmpty())
             throw new NotFoundInDataBaseException("Department with id " + id + " not found");
+        return optionalDepartment.get();
+    }
+
+    public DepartmentDTO setHeadOfDepartment(Department department, Member member) {
+        return setDepartmentManagement(department, member, department.getSecretary());
+    }
+
+    public DepartmentDTO setSecretary(Department department, Member member) {
+        return setDepartmentManagement(department, department.getHeadOfDepartment(), member);
+    }
+
+    private DepartmentDTO setDepartmentManagement(Department department, Member newHead, Member newSecretary) {
+        for (DepartmentManagementHistory dmh : department.getManagementHistories()) {
+            if (dmh.getEndDate() == null && !dmh.getHeadOfDepartment().getId().equals(newHead.getId())) {
+                endCurrentManagement(dmh);
+                createNewManagement(department, newHead, newSecretary);
+                return fetchDepartmentDTO(department);
+            }
         }
-        return optionalDepartment.get().getManagementHistories()
-                .stream()
-                .map(ObjectsMapper::convertDepartmentManagementHistoryToDTO)
-                .collect(Collectors.toList());
+        createNewManagement(department, newHead, newSecretary);
+        return fetchDepartmentDTO(department);
+    }
+
+    private void endCurrentManagement(DepartmentManagementHistory dmh) {
+        dmh.setEndDate(LocalDate.now());
+        departmentManagementHistoryService.save(dmh);
+    }
+
+    private void createNewManagement(Department department, Member newHead, Member newSecretary) {
+        DepartmentManagementHistory newDmh = new DepartmentManagementHistory();
+        newDmh.setDepartment(department);
+        newDmh.setHeadOfDepartment(newHead);
+        newDmh.setSecretary(newSecretary);
+        newDmh.setStartDate(LocalDate.now());
+        departmentManagementHistoryService.save(newDmh);
+    }
+
+    private DepartmentDTO fetchDepartmentDTO(Department department) {
+        return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(department.getId()).get());
     }
 }

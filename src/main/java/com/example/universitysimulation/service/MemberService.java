@@ -3,6 +3,7 @@ package com.example.universitysimulation.service;
 import com.example.universitysimulation.dto.MemberAcademicTitleHistoryDTO;
 import com.example.universitysimulation.dto.MemberDTO;
 import com.example.universitysimulation.dto.request.MemberRequest;
+import com.example.universitysimulation.model.Member;
 
 import java.util.List;
 
@@ -11,8 +12,8 @@ public interface MemberService {
 
     MemberDTO getById(Long id);
     MemberDTO create(MemberRequest memberRequest);
-    public void delete(Long id);
-    public MemberDTO update(MemberRequest memberRequest, Long id);
+    void delete(Long id);
+    MemberDTO update(MemberRequest memberRequest, Long id);
 
     MemberDTO updateEducationTitle(Long memberId, Long educationTitleId);
 
@@ -23,4 +24,6 @@ public interface MemberService {
     List<MemberAcademicTitleHistoryDTO> getAcademicTitleHistory(Long id);
 
     MemberDTO updateDepartment(Long memberId, Long departmentId);
+
+    Member findById(Long memberId);
 }

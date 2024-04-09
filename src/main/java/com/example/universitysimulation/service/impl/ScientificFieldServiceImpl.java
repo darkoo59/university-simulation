@@ -3,7 +3,6 @@ package com.example.universitysimulation.service.impl;
 import com.example.universitysimulation.dto.ScientificFieldDTO;
 import com.example.universitysimulation.dto.request.ScientificFieldRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.EducationTitle;
 import com.example.universitysimulation.model.ScientificField;
 import com.example.universitysimulation.repository.ScientificFieldRepository;
 import com.example.universitysimulation.service.ScientificFieldService;
@@ -30,10 +29,7 @@ public class ScientificFieldServiceImpl implements ScientificFieldService {
 
     @Override
     public ScientificFieldDTO getById(Long id) throws NotFoundInDataBaseException{
-        Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(id);
-        if(optionalScientificField.isEmpty())
-            throw new NotFoundInDataBaseException("Scientific field with id " + id + " not found");
-        return ObjectsMapper.convertScientificFieldToDTO(optionalScientificField.get());
+        return ObjectsMapper.convertScientificFieldToDTO(findById(id));
     }
 
     @Override
@@ -53,11 +49,16 @@ public class ScientificFieldServiceImpl implements ScientificFieldService {
 
     @Override
     public ScientificFieldDTO update(ScientificFieldRequest scientificFieldRequest, Long id) {
-        if(scientificFieldRepository.findById(id).isEmpty())
-            throw new NotFoundInDataBaseException("Scientific field with id "+id+ " not found");
-        ScientificField scientificField = ObjectsMapper.convertScientificFieldRequestToEntity(scientificFieldRequest);
-        scientificField.setId(id);
+        ScientificField scientificField = findById(id);
+        scientificField.setField(scientificField.getField());
         ScientificField savedScientificField = scientificFieldRepository.save(scientificField);
         return ObjectsMapper.convertScientificFieldToDTO(savedScientificField);
+    }
+
+    private ScientificField findById(Long id) {
+        Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(id);
+        if (optionalScientificField.isEmpty())
+            throw new NotFoundInDataBaseException("Scientific field with id " + id + " not found");
+        return optionalScientificField.get();
     }
 }

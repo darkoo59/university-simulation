@@ -1,10 +1,8 @@
 package com.example.universitysimulation.controller;
 
 import com.example.universitysimulation.dto.*;
-import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.service.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -57,25 +55,25 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         departmentService.delete(id);
         return new ResponseEntity<>("Department removed!", HttpStatus.OK);
     }
 
-    @PutMapping(path="/{id}")
-    public ResponseEntity<DepartmentDTO> updateByPut(@Valid @RequestBody DepartmentRequest departmentRequest,@PathVariable("id") Long id){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<DepartmentDTO> updateByPut(@Valid @RequestBody DepartmentRequest departmentRequest, @PathVariable("id") Long id) {
         DepartmentDTO department = departmentService.update(departmentRequest, id);
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
-    @PatchMapping(path="/{departmentId}/headOfTheDepartment/{memberId}")
-    public ResponseEntity<DepartmentDTO> updateHeadOfTheDepartment(@PathVariable("departmentId") Long departmentId, @PathVariable("memberId") Long memberId){
+    @PatchMapping(path = "/{departmentId}/headOfTheDepartment/{memberId}")
+    public ResponseEntity<DepartmentDTO> updateHeadOfTheDepartment(@PathVariable("departmentId") Long departmentId, @PathVariable("memberId") Long memberId) {
         DepartmentDTO department = departmentService.updateHeadOfDepartment(departmentId, memberId);
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
-    @PatchMapping(path="/{departmentId}/secretary/{memberId}")
-    public ResponseEntity<DepartmentDTO> updateSecretary(@PathVariable("departmentId") Long departmentId, @PathVariable("memberId") Long memberId){
+    @PatchMapping(path = "/{departmentId}/secretary/{memberId}")
+    public ResponseEntity<DepartmentDTO> updateSecretary(@PathVariable("departmentId") Long departmentId, @PathVariable("memberId") Long memberId) {
         DepartmentDTO department = departmentService.updateSecretary(departmentId, memberId);
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
