@@ -108,11 +108,13 @@ public class MemberServiceImpl implements MemberService {
         AcademicTitle academicTitle = academicTitleRepository.findById(academicTitleId)
                 .orElseThrow(() -> new NotFoundInDataBaseException("Academic title with id " + academicTitleId + " not found"));
 
-        academicTitleHistoryRepository.findByCurrentAcademicTitle(memberId, member.getAcademicTitle().getId())
-                .ifPresent(currentAcademicTitle -> {
-                    currentAcademicTitle.setEndDate(LocalDate.now());
-                    academicTitleHistoryRepository.save(currentAcademicTitle);
-                });
+        List<AcademicTitleHistory> currentTitles = academicTitleHistoryRepository.findByCurrentAcademicTitle(memberId, member.getAcademicTitle().getId());
+        if(!currentTitles.isEmpty()) {
+            for(AcademicTitleHistory currentAcademicTitle : currentTitles) {
+                currentAcademicTitle.setEndDate(LocalDate.now());
+                academicTitleHistoryRepository.save(currentAcademicTitle);
+            }
+        }
         member.setAcademicTitle(academicTitle);
 
         AcademicTitleHistory newAcademicTitle = new AcademicTitleHistory();
