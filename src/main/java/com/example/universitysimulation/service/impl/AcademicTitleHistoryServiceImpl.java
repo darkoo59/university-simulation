@@ -3,7 +3,9 @@ package com.example.universitysimulation.service.impl;
 import com.example.universitysimulation.dto.AcademicTitleHistoryDTO;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.AcademicTitleHistory;
+import com.example.universitysimulation.model.Member;
 import com.example.universitysimulation.repository.AcademicTitleHistoryRepository;
+import com.example.universitysimulation.repository.MemberRepository;
 import com.example.universitysimulation.service.AcademicTitleHistoryService;
 import com.example.universitysimulation.utils.ObjectsMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class AcademicTitleHistoryServiceImpl implements AcademicTitleHistoryService {
     private final AcademicTitleHistoryRepository academicTitleHistoryRepository;
+    private final MemberRepository memberRepository;
     @Override
     public List<AcademicTitleHistoryDTO> getAll() {
         return academicTitleHistoryRepository
@@ -36,6 +39,9 @@ public class AcademicTitleHistoryServiceImpl implements AcademicTitleHistoryServ
 
     @Override
     public List<AcademicTitleHistoryDTO> getByMemberId(Long id) {
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        if(optionalMember.isEmpty())
+            throw new NotFoundInDataBaseException("Member with id " + id + " not found");
         return academicTitleHistoryRepository
                 .findAllByMemberId(id)
                 .stream()

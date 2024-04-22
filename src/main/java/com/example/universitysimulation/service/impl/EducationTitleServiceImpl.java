@@ -28,7 +28,7 @@ public class EducationTitleServiceImpl implements EducationTitleService {
     }
 
     @Override
-    public EducationTitleDTO getById(Long id) throws NotFoundInDataBaseException{
+    public EducationTitleDTO getById(Long id){
         EducationTitle educationTitle = findById(id);
         return ObjectsMapper.convertEducationTitleToDTO(educationTitle);
     }

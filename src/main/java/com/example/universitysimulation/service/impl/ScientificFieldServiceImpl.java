@@ -50,7 +50,7 @@ public class ScientificFieldServiceImpl implements ScientificFieldService {
     @Override
     public ScientificFieldDTO update(ScientificFieldRequest scientificFieldRequest, Long id) {
         ScientificField scientificField = findById(id);
-        scientificField.setField(scientificField.getField());
+        scientificField.setField(scientificFieldRequest.getField());
         ScientificField savedScientificField = scientificFieldRepository.save(scientificField);
         return ObjectsMapper.convertScientificFieldToDTO(savedScientificField);
     }

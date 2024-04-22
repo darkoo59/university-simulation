@@ -1,6 +1,9 @@
 package com.example.universitysimulation.service.impl;
 
-import com.example.universitysimulation.dto.*;
+import com.example.universitysimulation.dto.DepartmentDTO;
+import com.example.universitysimulation.dto.DepartmentManagementHistoryDTO;
+import com.example.universitysimulation.dto.MemberDTO;
+import com.example.universitysimulation.dto.SubjectDTO;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.Department;
@@ -32,9 +35,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDTO getById(Long id) {
-        Department department = findById(id);
-        return ObjectsMapper.convertDepartmentEntityToDTO(department);
+    public DepartmentDTO getById(Long id) throws NotFoundInDataBaseException {
+        return ObjectsMapper.convertDepartmentEntityToDTO(findById(id));
     }
 
     @Override
@@ -64,8 +66,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<MemberDTO> getAllMembers(Long id) {
-        Department department = findById(id);
-        return department.getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).collect(Collectors.toList());
+        Optional<Department> optionalDepartment = departmentRepository.findById(id);
+        if (optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
+        return optionalDepartment.get().getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).collect(Collectors.toList());
     }
 
     @Override

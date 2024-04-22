@@ -41,8 +41,10 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = new Subject();
         subject.setName(subjectRequest.getName());
         subject.setEspb(subjectRequest.getEspb());
-        Optional<Department> department = departmentRepository.findById(subjectRequest.getDepartmentId());
-        department.ifPresent(subject::setDepartment);
+        Optional<Department> optionalDepartment = departmentRepository.findById(subjectRequest.getDepartmentId());
+        if(optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + subjectRequest.getDepartmentId() + " not found");
+        subject.setDepartment(optionalDepartment.get());
         return ObjectsMapper.convertSubjectToDTO(subjectRepository.save(subject));
     }
 
@@ -75,10 +77,11 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SubjectDTO updateDepartment(Long subjectId, Long departmentId) {
         Subject subject = findById(subjectId);
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new NotFoundInDataBaseException("Department with id " + departmentId + " not found"));
+        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
+        if(optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + departmentId + " not found");
 
-        subject.setDepartment(department);
+        subject.setDepartment(optionalDepartment.get());
         Subject savedSubject = subjectRepository.save(subject);
         return ObjectsMapper.convertSubjectToDTO(savedSubject);
     }

@@ -1,6 +1,8 @@
 package com.example.universitysimulation.utils;
+
 import com.example.universitysimulation.dto.*;
-import com.example.universitysimulation.dto.request.*;
+import com.example.universitysimulation.dto.request.EducationTitleRequest;
+import com.example.universitysimulation.dto.request.SubjectRequest;
 import com.example.universitysimulation.model.*;
 import org.modelmapper.ModelMapper;
 public class ObjectsMapper {
