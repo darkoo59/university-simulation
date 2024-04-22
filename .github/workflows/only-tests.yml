@@ -9,16 +9,13 @@ jobs:
   run-all-tests:
     runs-on: self-hosted
     steps:
-      - name: Test SSH access
-        run: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Reconfigure git to use HTTP authentication
         run: >
           git config --global url."https://github.com/".insteadOf
           ssh://git@github.com/
+
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Setup Java
         uses: actions/setup-java@v3
