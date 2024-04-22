@@ -10,7 +10,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Test SSH access
-        run: ssh -Tv darkoo59@github.com
+        run: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
       - name: Checkout
         uses: actions/checkout@v3
