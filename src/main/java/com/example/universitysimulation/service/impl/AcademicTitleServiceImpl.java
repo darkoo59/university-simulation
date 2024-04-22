@@ -53,7 +53,7 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
         if (optionalAcademicTitle.isEmpty())
             throw new NotFoundInDataBaseException("Academic title with id " + id + " not found");
         AcademicTitle academicTitle = optionalAcademicTitle.get();
-        academicTitle.setTitle(academicTitle.getTitle());
+        academicTitle.setTitle(academicTitleRequest.getTitle());
         return ObjectsMapper.convertAcademicTitleToDTO(academicTitleRepository.save(academicTitle));
     }
 }
