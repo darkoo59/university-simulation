@@ -5,6 +5,7 @@ import com.example.universitysimulation.dto.DepartmentManagementHistoryDTO;
 import com.example.universitysimulation.dto.MemberDTO;
 import com.example.universitysimulation.dto.SubjectDTO;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
+import com.example.universitysimulation.exception.AlreadyExistInDataBaseException;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.model.DepartmentManagementHistory;
@@ -82,6 +83,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO updateHeadOfDepartment(Long departmentId, Long memberId) {
         Department department = findById(departmentId);
         Member member = memberService.findById(memberId);
+        if(!member.getDepartment().getId().equals(departmentId))
+            throw new AlreadyExistInDataBaseException("Member with id " + memberId + " cannot be head of department at department with id "+ departmentId +
+                    " because he isn't working at that department. Please change member department and try again");
+        department.setHeadOfDepartment(member);
+        departmentRepository.save(department);
         return setHeadOfDepartment(department, member);
     }
 
@@ -89,6 +95,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO updateSecretary(Long departmentId, Long memberId) {
         Department department = findById(departmentId);
         Member member = memberService.findById(memberId);
+        if(!member.getDepartment().getId().equals(departmentId))
+            throw new AlreadyExistInDataBaseException("Member with id " + memberId + " cannot be secretary at department with id "+ departmentId +
+                    " because he isn't working at that department. Please change member department and try again");
+        department.setSecretary(member);
+        departmentRepository.save(department);
         return setSecretary(department, member);
     }
 
@@ -115,7 +126,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentDTO setDepartmentManagement(Department department, Member newHead, Member newSecretary) {
         for (DepartmentManagementHistory dmh : department.getManagementHistories()) {
-            if (dmh.getEndDate() == null && !dmh.getHeadOfDepartment().getId().equals(newHead.getId())) {
+            if (dmh.getEndDate() == null && dmh.getHeadOfDepartment() != null && !dmh.getHeadOfDepartment().getId().equals(newHead.getId())) {
                 endCurrentManagement(dmh);
                 createNewManagement(department, newHead, newSecretary);
                 return fetchDepartmentDTO(department);

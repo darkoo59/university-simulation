@@ -16,7 +16,5 @@ public interface SubjectService {
 
     SubjectDTO update(SubjectRequest subjectRequest, Long id);
 
-    void deleteDepartment(Long id);
-
     SubjectDTO updateDepartment(Long subjectId, Long departmentId);
 }

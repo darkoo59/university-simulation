@@ -138,27 +138,6 @@ public class SubjectServiceTests {
     }
 
     @Test
-    public void deleteDepartmentSuccessTest() {
-        // Arrange
-        Subject subject = createNewSubject();
-        Subject saved = subjectRepository.save(subject);
-
-        // Act
-        subjectService.deleteDepartment(saved.getId());
-        Subject found = subjectRepository.findById(saved.getId()).get();
-
-        // Assert
-        assertNull(found.getDepartment());
-    }
-
-    @Test
-    public void deleteDepartmentFailureTest() {
-        assertThrows(NotFoundInDataBaseException.class, () -> {
-            subjectService.deleteDepartment(Long.MAX_VALUE);
-        });
-    }
-
-    @Test
     public void updateDepartmentSuccessTest() {
         // Arrange
         Subject subject = createNewSubject();

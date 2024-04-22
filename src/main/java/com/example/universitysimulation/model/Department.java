@@ -1,6 +1,7 @@
 package com.example.universitysimulation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -31,9 +32,11 @@ public class Department {
     private String shortName;
 
     @ManyToOne
+    @Nullable
     private Member headOfDepartment;
 
     @ManyToOne
+    @Nullable
     private Member secretary;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "department")
