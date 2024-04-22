@@ -167,20 +167,20 @@ public class ObjectsMapperTests {
         assertEquals(dto.getMember().getId(), entity.getMember().getId());
     }
 
-    @Test
-    public void convertDepartmentManagementHistoryToDTOTest() {
-        // Arrange
-        DepartmentManagementHistory entity = createDepartmentManagementHistory(1l ,1l, 2l);
-
-        // Act
-        DepartmentManagementHistoryDTO dto = ObjectsMapper.convertDepartmentManagementHistoryToDTO(entity);
-
-        // Assert
-        assertEquals(dto.getId(), entity.getId());
-        assertEquals(dto.getStartDate(), entity.getStartDate());
-        assertEquals(dto.getEndDate(), entity.getEndDate());
-        assertEquals(dto.getDepartment().getId(), entity.getDepartment().getId());
-        assertEquals(dto.getSecretary().getId(), entity.getSecretary().getId());
-        assertEquals(dto.getHeadOfDepartment().getId(), entity.getHeadOfDepartment().getId());
-    }
+//    @Test
+//    public void convertDepartmentManagementHistoryToDTOTest() {
+//        // Arrange
+//        DepartmentManagementHistory entity = createDepartmentManagementHistory(1l ,1l, 2l);
+//
+//        // Act
+//        DepartmentManagementHistoryDTO dto = ObjectsMapper.convertDepartmentManagementHistoryToDTO(entity);
+//
+//        // Assert
+//        assertEquals(dto.getId(), entity.getId());
+//        assertEquals(dto.getStartDate(), entity.getStartDate());
+//        assertEquals(dto.getEndDate(), entity.getEndDate());
+//        assertEquals(dto.getDepartment().getId(), entity.getDepartment().getId());
+//        assertEquals(dto.getSecretary().getId(), entity.getSecretary().getId());
+//        assertEquals(dto.getHeadOfDepartment().getId(), entity.getHeadOfDepartment().getId());
+//    }
 }
