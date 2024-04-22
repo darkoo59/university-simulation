@@ -44,18 +44,28 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO create(MemberRequest memberRequest) {
+    public MemberDTO create(MemberRequest memberRequest) throws NotFoundInDataBaseException {
         Member member = new Member();
         Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(memberRequest.getAcademicTitleId());
+        if(optionalAcademicTitle.isEmpty())
+            throw new NotFoundInDataBaseException("Academic title with id " + memberRequest.getAcademicTitleId() + " not found");
         Optional<EducationTitle> optionalEducationTitle = educationTitleRepository.findById(memberRequest.getEducationTitleId());
+        if(optionalEducationTitle.isEmpty())
+            throw new NotFoundInDataBaseException("Educational title with id " + memberRequest.getEducationTitleId() + " not found");
         Optional<ScientificField> optionalScientificField = scientificFieldRepository.findById(memberRequest.getScientificTitleId());
+        if(optionalScientificField.isEmpty())
+            throw new NotFoundInDataBaseException("Scientific field with id " + memberRequest.getScientificTitleId() + " not found");
+        Optional<Department> optionalDepartment = departmentRepository.findById(memberRequest.getDepartmentId());
+        if(optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + memberRequest.getDepartmentId() + " not found");
 
         member.setFirstname(memberRequest.getFirstname());
         member.setLastname(memberRequest.getLastname());
 
-        optionalAcademicTitle.ifPresent(member::setAcademicTitle);
-        optionalEducationTitle.ifPresent(member::setEducationTitle);
-        optionalScientificField.ifPresent(member::setScientificField);
+        member.setAcademicTitle(optionalAcademicTitle.get());
+        member.setEducationTitle(optionalEducationTitle.get());
+        member.setScientificField(optionalScientificField.get());
+        member.setDepartment(optionalDepartment.get());
         return ObjectsMapper.convertMemberEntityToDTO(memberRepository.save(member));
     }
 
@@ -139,14 +149,18 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO updateDepartment(Long memberId, Long departmentId) throws NotFoundInDataBaseException, AlreadyExistInDataBaseException {
-        Member memberToUpdate = findById(memberId);
-        Department newDepartment = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new NotFoundInDataBaseException("Department with id " + departmentId + " not found"));
+        Optional<Member> optionalMemberToUpdate = memberRepository.findById(memberId);
+        if(optionalMemberToUpdate.isEmpty())
+            throw new NotFoundInDataBaseException("Member with id " + memberId + " not found");
+        Member memberToUpdate = optionalMemberToUpdate.get();
+        Optional<Department> optionalNewDepartment = departmentRepository.findById(departmentId);
+        if(optionalNewDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + departmentId + " not found");
         if (departmentRepository.isDepartmentWithMemberApartFromDepartment(memberId, departmentId)) {
             throw new AlreadyExistInDataBaseException("Member department can't be updated because member is "
                     + "head of department or secretary in another department");
         }
-        memberToUpdate.setDepartment(newDepartment);
+        memberToUpdate.setDepartment(optionalNewDepartment.get());
         Member updatedMember = memberRepository.save(memberToUpdate);
         return ObjectsMapper.convertMemberEntityToDTO(updatedMember);
     }

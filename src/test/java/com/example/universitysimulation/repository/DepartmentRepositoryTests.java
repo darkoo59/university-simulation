@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.example.universitysimulation.HelperTests.createNewDepartment;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,64 +22,56 @@ public class DepartmentRepositoryTests {
     @Test
     @Transactional
     public void saveDepartmentTest() {
-        // Create and save an academic title
-        Department department = departmentRepository.save(createNewDepartment());
+        // Arrange
+        Department department = createNewDepartment();
 
-        // Verify that the saved academic title is not null
-        assertNotNull(department);
-        assertNotNull(department.getId()); // Ensure the ID is generated
+        // Act
+        Department saved = departmentRepository.save(department);
+
+        // Assert
+        assertNotNull(saved);
+        assertNotNull(saved.getId()); // Ensure the ID is generated
     }
 
     @Test
     @Transactional
     public void deleteDepartmentTest() {
-        // Create and save an academic title
+        // Arrange
         Department department = departmentRepository.save(createNewDepartment());
-        assertNotNull(department);
 
-        // Delete the saved academic title
+        // Act
         departmentRepository.delete(department);
-
-        // Verify that the academic title is deleted
         Optional<Department> deleted = departmentRepository.findById(department.getId());
+
+        // Assert
+        assertNotNull(department);
         assertFalse(deleted.isPresent());
     }
 
     @Test
     public void findByIdTest() {
-        // Create and save an academic title with a specific ID
+        // Arrange
         Department department = departmentRepository.save(createNewDepartment());
-        assertNotNull(department);
 
-        // Find the saved academic title by ID
+        // Act
         Optional<Department> found = departmentRepository.findById(department.getId());
 
-        // Verify that the academic title is found and matches the saved one
+        // Assert
+        assertNotNull(department);
         assertTrue(found.isPresent());
         assertEquals(department.getId(), found.get().getId());
     }
 
     @Test
     public void isDepartmentMemberApartFromDepartmentTest() {
+        // Arrange
         Department department = departmentRepository.save(createNewDepartment());
-        assertNotNull(department);
 
+        // Act
         Boolean isApart = departmentRepository.isDepartmentWithMemberApartFromDepartment(5l,  2l);
 
+        // Assert
+        assertNotNull(department);
         assertTrue(isApart);
-    }
-
-    private Department createNewDepartment() {
-        Department department = new Department();
-        department.setId(1l);
-        department.setName("name_test");
-        department.setShortName("short_test");
-        Member secretary = new Member();
-        Member head = new Member();
-        secretary.setId(1l);
-        head.setId(1l);
-        department.setSecretary(secretary);
-        department.setHeadOfDepartment(head);
-        return department;
     }
 }

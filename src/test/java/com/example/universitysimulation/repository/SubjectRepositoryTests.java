@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.example.universitysimulation.HelperTests.createNewSubject;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,48 +24,43 @@ public class SubjectRepositoryTests {
     @Test
     @Transactional
     public void saveSubjectTest() {
-        // Create and save an academic title
-        Subject subject = subjectRepository.save(createNewSubject());
+        // Arrange
+        Subject subject = createNewSubject();
 
-        // Verify that the saved academic title is not null
+        // Act
+        Subject saved = subjectRepository.save(subject);
+
+        // Assert
         assertNotNull(subject);
-        assertNotNull(subject.getId()); // Ensure the ID is generated
+        assertNotNull(subject.getId());
     }
 
     @Test
     @Transactional
     public void deleteSubjectTest() {
-        // Create and save an academic title
+        // Arrange
         Subject subject = subjectRepository.save(createNewSubject());
-        assertNotNull(subject);
 
-        // Delete the saved academic title
+        // Act
         subjectRepository.delete(subject);
-
-        // Verify that the academic title is deleted
         Optional<Subject> deleted = subjectRepository.findById(subject.getId());
+
+        // Assert
+        assertNotNull(subject);
         assertFalse(deleted.isPresent());
     }
 
     @Test
     public void findByIdTest() {
-        // Create and save an academic title with a specific ID
+        // Arrange
         Subject subject = subjectRepository.save(createNewSubject());
-        assertNotNull(subject);
 
-        // Find the saved academic title by ID
+        // Act
         Optional<Subject> found = subjectRepository.findById(subject.getId());
 
-        // Verify that the academic title is found and matches the saved one
+        // Assert
+        assertNotNull(subject);
         assertTrue(found.isPresent());
         assertEquals(subject.getId(), found.get().getId());
-    }
-
-    private Subject createNewSubject() {
-        Subject subject = new Subject();
-        Department department = new Department();
-        subject.setId(1l);
-        subject.setDepartment(department);
-        return subject;
     }
 }

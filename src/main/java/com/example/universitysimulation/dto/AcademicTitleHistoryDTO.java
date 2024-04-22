@@ -13,7 +13,7 @@ public class AcademicTitleHistoryDTO {
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
-    private MemberDTO memberDTO;
-    private AcademicTitleDTO academicTitleDTO;
-    private ScientificFieldDTO scientificFieldDTO;
+    private MemberDTO member;
+    private AcademicTitleDTO academicTitle;
+    private ScientificFieldDTO scientificField;
 }

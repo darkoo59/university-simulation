@@ -32,9 +32,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDTO getById(Long id) {
-        Department department = findById(id);
-        return ObjectsMapper.convertDepartmentEntityToDTO(department);
+    public DepartmentDTO getById(Long id) throws NotFoundInDataBaseException {
+        return ObjectsMapper.convertDepartmentEntityToDTO(findById(id));
     }
 
     @Override
@@ -64,8 +63,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<MemberDTO> getAllMembers(Long id) {
-        Department department = findById(id);
-        return department.getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).collect(Collectors.toList());
+        Optional<Department> optionalDepartment = departmentRepository.findById(id);
+        if (optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + id + " not found");
+        return optionalDepartment.get().getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).collect(Collectors.toList());
     }
 
     @Override

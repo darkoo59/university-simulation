@@ -22,38 +22,41 @@ public class EducationTitleRepositoryTests {
 
     @Test
     public void saveEducationTitleTest() {
-        // Create and save an academic title
-        EducationTitle educationTitle = educationTitleRepository.save(new EducationTitle("title_test"));
+        // Arrange
+        EducationTitle educationTitle = new EducationTitle("title_test");
 
-        // Verify that the saved academic title is not null
+        // Act
+        EducationTitle saved = educationTitleRepository.save(educationTitle);
+
+        // Assert
         assertNotNull(educationTitle);
-        assertNotNull(educationTitle.getId()); // Ensure the ID is generated
+        assertNotNull(educationTitle.getId());
     }
 
     @Test
     public void deleteEducationTitleTest() {
-        // Create and save an academic title
+        // Arrange
         EducationTitle educationTitle = educationTitleRepository.save(new EducationTitle("title_test"));
-        assertNotNull(educationTitle);
 
-        // Delete the saved academic title
+        // Act
         educationTitleRepository.delete(educationTitle);
-
-        // Verify that the academic title is deleted
         Optional<EducationTitle> deleted = educationTitleRepository.findById(educationTitle.getId());
+
+        // Assert
+        assertNotNull(educationTitle);
         assertFalse(deleted.isPresent());
     }
 
     @Test
     public void findByIdTest() {
-        // Create and save an academic title with a specific ID
+        // Arrange
         EducationTitle educationTitle = educationTitleRepository.save(new EducationTitle(3L, "test_at"));
-        assertNotNull(educationTitle);
 
-        // Find the saved academic title by ID
+        // Act
         Optional<EducationTitle> found = educationTitleRepository.findById(educationTitle.getId());
 
-        // Verify that the academic title is found and matches the saved one
+        // Assert
+        assertNotNull(educationTitle);
         assertTrue(found.isPresent());
         assertEquals(educationTitle.getId(), found.get().getId());
     }

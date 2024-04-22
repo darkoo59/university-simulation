@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
+import static com.example.universitysimulation.HelperTests.createAcademicTitleHistory;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,89 +32,70 @@ public class AcademicTitleHistoryRepositoryTests {
 
     @Test
     public void saveAcademicTitleHistoryTest() {
-        // Create an academic title history
+        // Arrange
         AcademicTitleHistory academicTitleHistory = createAcademicTitleHistory();
 
-        // Save the academic title history
+        // Act
         AcademicTitleHistory saved = academicTitleHistoryRepository.save(academicTitleHistory);
 
-        // Verify that the saved academic title history is not null
+        // Assert
         assertNotNull(saved);
     }
 
     @Test
     public void deleteAcademicTitleHistoryTest() {
-        // Create and save an academic title history
+        // Arrange
         AcademicTitleHistory academicTitleHistory = createAcademicTitleHistory();
         AcademicTitleHistory saved = academicTitleHistoryRepository.save(academicTitleHistory);
 
-        // Delete the saved academic title history
+        // Act
         academicTitleHistoryRepository.delete(saved);
 
-        // Verify that the academic title history is deleted
+        // Assert
         Optional<AcademicTitleHistory> deleted = academicTitleHistoryRepository.findById(saved.getId());
         assertFalse(deleted.isPresent());
     }
 
     @Test
     public void findByIdTest() {
-        // Create and save an academic title history
+        // Arrange
         AcademicTitleHistory academicTitleHistory = createAcademicTitleHistory();
         AcademicTitleHistory saved = academicTitleHistoryRepository.save(academicTitleHistory);
 
-        // Find the saved academic title history by ID
+        // Act
         Optional<AcademicTitleHistory> found = academicTitleHistoryRepository.findById(saved.getId());
 
-        // Verify that the academic title history is found and matches the saved one
+        // Assert
         assertTrue(found.isPresent());
         assertEquals(saved.getId(), found.get().getId());
     }
 
     @Test
     public void findByCurrentAcademicTitleTest() {
-        // Create and save an academic title history
+        // Arrange
         AcademicTitleHistory academicTitleHistory = createAcademicTitleHistory();
         academicTitleHistory.setEndDate(null);
+        academicTitleHistoryRepository.save(academicTitleHistory);
 
-        AcademicTitleHistory saved = academicTitleHistoryRepository.save(academicTitleHistory);
-
-        // Find the saved academic title history by current
+        // Act
         List<AcademicTitleHistory> founded = academicTitleHistoryRepository.findByCurrentAcademicTitle(1l, 1l);
         List<AcademicTitleHistory> notFunded = academicTitleHistoryRepository.findByCurrentAcademicTitle(2l, 2l);
 
+        // Assert
         assertFalse(founded.isEmpty());
         assertTrue(notFunded.isEmpty());
     }
 
     @Test
     public void findByMemberIdTest() {
-        // Create and save an academic title history
+        // Arrange
         AcademicTitleHistory academicTitleHistory = createAcademicTitleHistory();
-        AcademicTitleHistory saved = academicTitleHistoryRepository.save(academicTitleHistory);
+        academicTitleHistoryRepository.save(academicTitleHistory);
+
+        // Act
         List<AcademicTitleHistory> found = academicTitleHistoryRepository.findAllByMemberId(1l);
 
+        // Assert
         assertFalse(found.isEmpty());
     }
-
-    // Helper method to create a sample AcademicTitleHistory object
-    private AcademicTitleHistory createAcademicTitleHistory() {
-        AcademicTitle academicTitle = new AcademicTitle(1L, "test");
-        ScientificField scientificField = new ScientificField(1L, "test");
-        Member member = new Member();
-        member.setId(1L);
-
-        AcademicTitleHistory academicTitleHistory = new AcademicTitleHistory();
-        academicTitleHistory.setAcademicTitle(academicTitle);
-        academicTitleHistory.setStartDate(LocalDate.now());
-        academicTitleHistory.setEndDate(LocalDate.now().plusDays(1));
-        academicTitleHistory.setScientificField(scientificField);
-        academicTitleHistory.setMember(member);
-
-        return academicTitleHistory;
-    }
-
-//    @AfterEach
-//    public void deleteInsertedData() {
-//        jdbcTemplate.execute("TRUNCATE TABLE academic_title_history" );
-//    }
 }

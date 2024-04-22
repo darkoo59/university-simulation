@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.example.universitysimulation.HelperTests.createNewMember;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,59 +22,43 @@ public class MemberRepositoryTests {
     @Test
     @Transactional
     public void saveMemberTest() {
-        // Create and save an academic title
-        Member member = memberRepository.save(createNewMember());
+        // Arrange
+        Member member = createNewMember();
 
-        // Verify that the saved academic title is not null
-        assertNotNull(member);
-        assertNotNull(member.getId()); // Ensure the ID is generated
+        // Act
+        Member saved = memberRepository.save(member);
+
+        // Assert
+        assertNotNull(saved);
+        assertNotNull(saved.getId());
     }
 
     @Test
     @Transactional
     public void deleteMemberTest() {
-        // Create and save an academic title
+        // Arrange
         Member member = memberRepository.save(createNewMember());
-        assertNotNull(member);
 
-        // Delete the saved academic title
+        // Act
         memberRepository.delete(member);
-
-        // Verify that the academic title is deleted
         Optional<Member> deleted = memberRepository.findById(member.getId());
+
+        // Assert
+        assertNotNull(member);
         assertFalse(deleted.isPresent());
     }
 
     @Test
     public void findByIdTest() {
-        // Create and save an academic title with a specific ID
+        // Arrange
         Member member = memberRepository.save(createNewMember());
-        assertNotNull(member);
 
-        // Find the saved academic title by ID
+        // Act
         Optional<Member> found = memberRepository.findById(member.getId());
 
-        // Verify that the academic title is found and matches the saved one
+        // Assert
+        assertNotNull(member);
         assertTrue(found.isPresent());
         assertEquals(member.getId(), found.get().getId());
-    }
-
-    private Member createNewMember() {
-        Member member = new Member();
-        Department department = new Department();
-        AcademicTitle academicTitle = new AcademicTitle();
-        EducationTitle educationTitle = new EducationTitle();
-        ScientificField scientificField = new ScientificField();
-        department.setId(1l);
-        academicTitle.setId(1l);
-        educationTitle.setId(1l);
-        scientificField.setId(1l);
-        member.setDepartment(department);
-        member.setAcademicTitle(academicTitle);
-        member.setEducationTitle(educationTitle);
-        member.setScientificField(scientificField);
-        member.setFirstname("firstname_test");
-        member.setLastname("lastname_test");
-        return member;
     }
 }

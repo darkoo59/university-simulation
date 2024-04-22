@@ -21,38 +21,41 @@ public class ScientificFieldRepositoryTests {
 
     @Test
     public void saveScientificFieldTest() {
-        // Create and save an academic title
-        ScientificField scientificField = scientificFieldRepository.save(new ScientificField("field_test"));
+        // Arrange
+        ScientificField scientificField = new ScientificField("field_test");
 
-        // Verify that the saved academic title is not null
+        // Act
+        ScientificField saved = scientificFieldRepository.save(scientificField);
+
+        // Assert
         assertNotNull(scientificField);
-        assertNotNull(scientificField.getId()); // Ensure the ID is generated
+        assertNotNull(scientificField.getId());
     }
 
     @Test
     public void deleteScientificFieldTest() {
-        // Create and save an academic title
+        // Arrange
         ScientificField scientificField = scientificFieldRepository.save(new ScientificField("field_test"));
-        assertNotNull(scientificField);
 
-        // Delete the saved academic title
+        // Act
         scientificFieldRepository.delete(scientificField);
-
-        // Verify that the academic title is deleted
         Optional<ScientificField> deleted = scientificFieldRepository.findById(scientificField.getId());
+
+        // Assert
+        assertNotNull(scientificField);
         assertFalse(deleted.isPresent());
     }
 
     @Test
     public void findByIdTest() {
-        // Create and save an academic title with a specific ID
+        // Arrange
         ScientificField scientificField = scientificFieldRepository.save(new ScientificField(3L, "field_test"));
-        assertNotNull(scientificField);
 
-        // Find the saved academic title by ID
+        // Act
         Optional<ScientificField> found = scientificFieldRepository.findById(scientificField.getId());
 
-        // Verify that the academic title is found and matches the saved one
+        // Assert
+        assertNotNull(scientificField);
         assertTrue(found.isPresent());
         assertEquals(scientificField.getId(), found.get().getId());
     }
