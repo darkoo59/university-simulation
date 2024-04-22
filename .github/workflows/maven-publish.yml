@@ -12,14 +12,14 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     services:
       postgres:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
+          POSTGRES_USER: admin
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
