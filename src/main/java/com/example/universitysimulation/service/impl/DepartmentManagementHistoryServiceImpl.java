@@ -3,7 +3,6 @@ package com.example.universitysimulation.service.impl;
 import com.example.universitysimulation.dto.DepartmentManagementHistoryDTO;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.DepartmentManagementHistory;
-import com.example.universitysimulation.model.Member;
 import com.example.universitysimulation.repository.DepartmentManagementHistoryRepository;
 import com.example.universitysimulation.repository.DepartmentRepository;
 import com.example.universitysimulation.repository.MemberRepository;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor

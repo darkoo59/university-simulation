@@ -1,20 +1,14 @@
 package com.example.universitysimulation.service;
 
-import com.example.universitysimulation.dto.AcademicTitleHistoryDTO;
 import com.example.universitysimulation.dto.DepartmentManagementHistoryDTO;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.AcademicTitleHistory;
-import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.model.DepartmentManagementHistory;
-import com.example.universitysimulation.model.Member;
-import com.example.universitysimulation.repository.AcademicTitleHistoryRepository;
 import com.example.universitysimulation.repository.DepartmentManagementHistoryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static com.example.universitysimulation.HelperTests.createDepartmentManagementHistory;

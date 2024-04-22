@@ -1,24 +1,16 @@
 package com.example.universitysimulation.repository;
 
-import com.example.universitysimulation.model.AcademicTitle;
 import com.example.universitysimulation.model.AcademicTitleHistory;
-import com.example.universitysimulation.model.Member;
-import com.example.universitysimulation.model.ScientificField;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.universitysimulation.HelperTests.createAcademicTitleHistory;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -26,9 +18,6 @@ public class AcademicTitleHistoryRepositoryTests {
 
     @Autowired
     private AcademicTitleHistoryRepository academicTitleHistoryRepository;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Test
     public void saveAcademicTitleHistoryTest() {

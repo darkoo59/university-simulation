@@ -1,13 +1,9 @@
 package com.example.universitysimulation.service;
 
-import com.example.universitysimulation.dto.AcademicTitleDTO;
 import com.example.universitysimulation.dto.EducationTitleDTO;
-import com.example.universitysimulation.dto.request.AcademicTitleRequest;
 import com.example.universitysimulation.dto.request.EducationTitleRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.AcademicTitle;
 import com.example.universitysimulation.model.EducationTitle;
-import com.example.universitysimulation.repository.AcademicTitleRepository;
 import com.example.universitysimulation.repository.EducationTitleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional

@@ -1,6 +1,9 @@
 package com.example.universitysimulation.service;
 
-import com.example.universitysimulation.dto.*;
+import com.example.universitysimulation.dto.DepartmentDTO;
+import com.example.universitysimulation.dto.DepartmentManagementHistoryDTO;
+import com.example.universitysimulation.dto.MemberDTO;
+import com.example.universitysimulation.dto.SubjectDTO;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 
 import java.util.List;

@@ -1,6 +1,9 @@
 package com.example.universitysimulation.service.impl;
 
-import com.example.universitysimulation.dto.*;
+import com.example.universitysimulation.dto.DepartmentDTO;
+import com.example.universitysimulation.dto.DepartmentManagementHistoryDTO;
+import com.example.universitysimulation.dto.MemberDTO;
+import com.example.universitysimulation.dto.SubjectDTO;
 import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
 import com.example.universitysimulation.model.Department;

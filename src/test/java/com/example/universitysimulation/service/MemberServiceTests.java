@@ -1,15 +1,11 @@
 package com.example.universitysimulation.service;
 
-import com.example.universitysimulation.dto.DepartmentDTO;
 import com.example.universitysimulation.dto.MemberAcademicTitleHistoryDTO;
 import com.example.universitysimulation.dto.MemberDTO;
-import com.example.universitysimulation.dto.SubjectDTO;
-import com.example.universitysimulation.dto.request.DepartmentRequest;
 import com.example.universitysimulation.dto.request.MemberRequest;
 import com.example.universitysimulation.exception.AlreadyExistInDataBaseException;
 import com.example.universitysimulation.exception.NotFoundInDataBaseException;
-import com.example.universitysimulation.model.*;
-import com.example.universitysimulation.repository.DepartmentRepository;
+import com.example.universitysimulation.model.Member;
 import com.example.universitysimulation.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +16,6 @@ import java.util.List;
 
 import static com.example.universitysimulation.HelperTests.createNewMember;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional

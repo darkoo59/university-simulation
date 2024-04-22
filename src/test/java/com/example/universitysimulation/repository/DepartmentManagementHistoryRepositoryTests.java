@@ -1,21 +1,11 @@
 package com.example.universitysimulation.repository;
 
-import com.example.universitysimulation.model.AcademicTitle;
-import com.example.universitysimulation.model.Department;
 import com.example.universitysimulation.model.DepartmentManagementHistory;
-import com.example.universitysimulation.model.Member;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

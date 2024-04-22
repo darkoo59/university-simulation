@@ -1,9 +1,8 @@
 package com.example.universitysimulation.repository;
 
-import com.example.universitysimulation.model.*;
+import com.example.universitysimulation.model.Department;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 import static com.example.universitysimulation.HelperTests.createNewDepartment;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
