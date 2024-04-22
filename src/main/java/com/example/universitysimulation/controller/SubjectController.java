@@ -42,12 +42,6 @@ public class SubjectController {
         return new ResponseEntity<>("Subject removed!", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/department")
-    public ResponseEntity<String> deleteDepartment(@PathVariable("id") Long id) {
-        subjectService.deleteDepartment(id);
-        return new ResponseEntity<>("Subject department removed!", HttpStatus.OK);
-    }
-
     @PutMapping(path = "/{id}")
     public ResponseEntity<SubjectDTO> updateByPut(@Valid @RequestBody SubjectRequest subjectRequest, @PathVariable("id") Long id) {
         SubjectDTO subject = subjectService.update(subjectRequest, id);

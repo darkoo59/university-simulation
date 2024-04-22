@@ -68,13 +68,6 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void deleteDepartment(Long id) {
-        Subject subject = findById(id);
-        subject.setDepartment(null);
-        subjectRepository.save(subject);
-    }
-
-    @Override
     public SubjectDTO updateDepartment(Long subjectId, Long departmentId) {
         Subject subject = findById(subjectId);
         Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);

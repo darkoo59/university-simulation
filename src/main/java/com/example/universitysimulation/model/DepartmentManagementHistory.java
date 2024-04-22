@@ -1,5 +1,6 @@
 package com.example.universitysimulation.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,9 +22,11 @@ public class DepartmentManagementHistory {
     private Department department;
 
     @ManyToOne
+    @Nullable
     private Member secretary;
 
     @ManyToOne
+    @Nullable
     private Member headOfDepartment;
 
     @Column(name = "start_date")
