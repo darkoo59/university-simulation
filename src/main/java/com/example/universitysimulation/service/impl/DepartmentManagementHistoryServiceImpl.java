@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +33,7 @@ public class DepartmentManagementHistoryServiceImpl implements DepartmentManagem
                 .findByDepartmentId(id)
                 .stream()
                 .map(ObjectsMapper::convertDepartmentManagementHistoryToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -45,6 +44,6 @@ public class DepartmentManagementHistoryServiceImpl implements DepartmentManagem
                 .findByMemberId(id)
                 .stream()
                 .map(ObjectsMapper::convertDepartmentManagementHistoryToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

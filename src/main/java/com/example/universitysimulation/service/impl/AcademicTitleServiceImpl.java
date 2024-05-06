@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static com.example.universitysimulation.utils.Constants.academicTitleMissingId;
 
 @RequiredArgsConstructor
 @Service
@@ -21,14 +22,14 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
 
     @Override
     public List<AcademicTitleDTO> getAll() {
-        return academicTitleRepository.findAll().stream().map(ObjectsMapper::convertAcademicTitleToDTO).collect(Collectors.toList());
+        return academicTitleRepository.findAll().stream().map(ObjectsMapper::convertAcademicTitleToDTO).toList();
     }
 
     @Override
     public AcademicTitleDTO getById(Long id) throws NotFoundInDataBaseException {
         Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(id);
         if (optionalAcademicTitle.isEmpty())
-            throw new NotFoundInDataBaseException("Academic title with id " + id + " not found");
+            throw new NotFoundInDataBaseException(academicTitleMissingId(id));
         return ObjectsMapper.convertAcademicTitleToDTO(optionalAcademicTitle.get());
     }
 
@@ -42,7 +43,7 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
     @Override
     public void delete(Long id) throws NotFoundInDataBaseException {
         if (academicTitleRepository.findById(id).isEmpty()) {
-            throw new NotFoundInDataBaseException("Academic title with id " + id + " not found");
+            throw new NotFoundInDataBaseException(academicTitleMissingId(id));
         }
         academicTitleRepository.deleteById(id);
     }
@@ -51,7 +52,7 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
     public AcademicTitleDTO update(AcademicTitleRequest academicTitleRequest, Long id) {
         Optional<AcademicTitle> optionalAcademicTitle = academicTitleRepository.findById(id);
         if (optionalAcademicTitle.isEmpty())
-            throw new NotFoundInDataBaseException("Academic title with id " + id + " not found");
+            throw new NotFoundInDataBaseException(academicTitleMissingId(id));
         AcademicTitle academicTitle = optionalAcademicTitle.get();
         academicTitle.setTitle(academicTitleRequest.getTitle());
         return ObjectsMapper.convertAcademicTitleToDTO(academicTitleRepository.save(academicTitle));

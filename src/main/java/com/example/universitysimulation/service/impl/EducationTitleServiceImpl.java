@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +23,7 @@ public class EducationTitleServiceImpl implements EducationTitleService {
                 .findAll()
                 .stream()
                 .map(ObjectsMapper::convertEducationTitleToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

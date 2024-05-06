@@ -19,7 +19,7 @@
 
   <p align="center">
     <br />
-    <a href="https://github.com/darkoo59/university-simulation/tree/main/doc"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/darkoo59/university-simulation/blob/dev/doc/documentation(serbian-language).pdf"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/darkoo59/university-simulation/issues">Report Bug</a>
@@ -156,7 +156,7 @@ Install the latest version of <a href="https://www.postgresql.org/">PostgreSQL</
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-_For more examples, please refer to the [Documentation](https://github.com/darkoo59/university-simulation/tree/main/doc)_
+_For more examples, please refer to the [Documentation](https://github.com/darkoo59/university-simulation/blob/dev/doc/documentation(serbian-language).pdf)_
 
 See the [open issues](https://github.com/darkoo59/university-simulation/issues) for a full list of proposed features (and
 known issues).

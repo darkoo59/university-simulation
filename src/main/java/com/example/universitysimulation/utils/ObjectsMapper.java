@@ -7,6 +7,7 @@ import com.example.universitysimulation.model.*;
 import org.modelmapper.ModelMapper;
 public class ObjectsMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
+    private ObjectsMapper () {}
 
     public static AcademicTitleDTO convertAcademicTitleToDTO(AcademicTitle academicTitle){
         return modelMapper.map(academicTitle, AcademicTitleDTO.class);

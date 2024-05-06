@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,7 +27,7 @@ public class SubjectServiceImpl implements SubjectService {
                 .findAll()
                 .stream()
                 .map(ObjectsMapper::convertSubjectToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -60,8 +59,11 @@ public class SubjectServiceImpl implements SubjectService {
     public SubjectDTO update(SubjectRequest subjectRequest, Long id) throws NotFoundInDataBaseException {
         if (subjectRepository.findById(id).isEmpty())
             throw new NotFoundInDataBaseException("Subject with id " + id + " not found");
+        Optional<Department> optionalDepartment = departmentRepository.findById(subjectRequest.getDepartmentId());
+        if (optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + subjectRequest.getDepartmentId() + " not found");
         Subject subject = ObjectsMapper.convertSubjectRequestToEntity(subjectRequest);
-        subject.setDepartment(departmentRepository.findById(subjectRequest.getDepartmentId()).get());
+        subject.setDepartment(optionalDepartment.get());
         subject.setId(id);
         Subject savedSubject = subjectRepository.save(subject);
         return ObjectsMapper.convertSubjectToDTO(savedSubject);
