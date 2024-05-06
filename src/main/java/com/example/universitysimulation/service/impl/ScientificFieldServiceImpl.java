@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +23,7 @@ public class ScientificFieldServiceImpl implements ScientificFieldService {
                 .findAll()
                 .stream()
                 .map(ObjectsMapper::convertScientificFieldToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

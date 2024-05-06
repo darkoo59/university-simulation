@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static com.example.universitysimulation.utils.Constants.academicTitleHistoryMissingId;
+import static com.example.universitysimulation.utils.Constants.memberMissingId;
 
 @RequiredArgsConstructor
 @Service
@@ -26,14 +28,14 @@ public class AcademicTitleHistoryServiceImpl implements AcademicTitleHistoryServ
                 .findAll()
                 .stream()
                 .map(ObjectsMapper::convertAcademicTitleHistoryToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public AcademicTitleHistoryDTO getById(Long id) {
         Optional<AcademicTitleHistory> optionalAcademicTitleHistory = academicTitleHistoryRepository.findById(id);
         if(optionalAcademicTitleHistory.isEmpty())
-            throw new NotFoundInDataBaseException("Academic title history with id " + id + " not found");
+            throw new NotFoundInDataBaseException(academicTitleHistoryMissingId(id));
         return ObjectsMapper.convertAcademicTitleHistoryToDTO(optionalAcademicTitleHistory.get());
     }
 
@@ -41,11 +43,11 @@ public class AcademicTitleHistoryServiceImpl implements AcademicTitleHistoryServ
     public List<AcademicTitleHistoryDTO> getByMemberId(Long id) {
         Optional<Member> optionalMember = memberRepository.findById(id);
         if(optionalMember.isEmpty())
-            throw new NotFoundInDataBaseException("Member with id " + id + " not found");
+            throw new NotFoundInDataBaseException(memberMissingId(id));
         return academicTitleHistoryRepository
                 .findAllByMemberId(id)
                 .stream()
                 .map(ObjectsMapper::convertAcademicTitleHistoryToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -48,7 +48,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.add(error.getField() + ": " + error.getDefaultMessage());
         }
@@ -65,33 +65,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String error = ex.getParameterName() + " parameter is missing";
 
         CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getRootBeanClass().getName() + " " + violation.getPropertyPath() + ": " + violation.getMessage());
         }
 
         CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<Object> handleMethodArgumentTypeMissmatch(MethodArgumentTypeMismatchException ex, WebRequest request) {
         String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
         CustomError customError = new CustomError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         String error = "No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL();
-
         CustomError customError = new CustomError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 
     @Override
@@ -102,7 +101,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ex.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
 
         CustomError customError = new CustomError(HttpStatus.METHOD_NOT_ALLOWED, ex.getLocalizedMessage(), builder.toString());
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 
     @Override
@@ -113,12 +112,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ex.getSupportedMediaTypes().forEach(t -> builder.append(t + ", "));
 
         CustomError customError = new CustomError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getLocalizedMessage(), builder.substring(0, builder.length() - 2));
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleOthersExceptions(Exception ex, WebRequest request) {
         CustomError customError = new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occured");
-        return new ResponseEntity<Object>(customError, new HttpHeaders(), customError.getStatus());
+        return new ResponseEntity<>(customError, new HttpHeaders(), customError.getStatus());
     }
 }

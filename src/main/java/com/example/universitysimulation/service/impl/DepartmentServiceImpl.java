@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<DepartmentDTO> getAll() {
-        return departmentRepository.findAll().stream().map(ObjectsMapper::convertDepartmentEntityToDTO).collect(Collectors.toList());
+        return departmentRepository.findAll().stream().map(ObjectsMapper::convertDepartmentEntityToDTO).toList();
     }
 
     @Override
@@ -50,9 +49,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public void delete(Long id) throws NotFoundInDataBaseException {
-        if (departmentRepository.findById(id).isEmpty()) {
+        if (departmentRepository.findById(id).isEmpty())
             throw new NotFoundInDataBaseException("Department with id " + id + " not found");
-        }
         departmentRepository.deleteById(id);
     }
 
@@ -70,13 +68,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
         if (optionalDepartment.isEmpty())
             throw new NotFoundInDataBaseException("Department with id " + id + " not found");
-        return optionalDepartment.get().getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).collect(Collectors.toList());
+        return optionalDepartment.get().getMembers().stream().map(ObjectsMapper::convertMemberEntityToDTO).toList();
     }
 
     @Override
     public List<SubjectDTO> getAllSubjects(Long id) {
         Department department = findById(id);
-        return department.getSubjects().stream().map(ObjectsMapper::convertSubjectToDTO).collect(Collectors.toList());
+        return department.getSubjects().stream().map(ObjectsMapper::convertSubjectToDTO).toList();
     }
 
     @Override
@@ -106,7 +104,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<DepartmentManagementHistoryDTO> getDepartmentManagementHistory(Long id) {
         Department department = findById(id);
-        return department.getManagementHistories().stream().map(ObjectsMapper::convertDepartmentManagementHistoryToDTO).collect(Collectors.toList());
+        return department.getManagementHistories().stream().map(ObjectsMapper::convertDepartmentManagementHistoryToDTO).toList();
     }
 
     private Department findById(Long id) {
@@ -151,6 +149,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     private DepartmentDTO fetchDepartmentDTO(Department department) {
-        return ObjectsMapper.convertDepartmentEntityToDTO(departmentRepository.findById(department.getId()).get());
+        Optional<Department> optionalDepartment = departmentRepository.findById(department.getId());
+        if(optionalDepartment.isEmpty())
+            throw new NotFoundInDataBaseException("Department with id " + department.getId() + " not found");
+        return ObjectsMapper.convertDepartmentEntityToDTO(optionalDepartment.get());
     }
 }
